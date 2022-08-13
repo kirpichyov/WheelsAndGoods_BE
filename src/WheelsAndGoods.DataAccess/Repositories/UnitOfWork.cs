@@ -9,12 +9,16 @@ public class UnitOfWork : IUnitOfWork
 	private readonly DatabaseContext _databaseContext;
 	private readonly ILogger<UnitOfWork> _logger;
 
+	private IUsersRepository? _usersRepository;
+
 	public UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger)
 	{
 		_databaseContext = databaseContext;
 		_logger = logger;
 	}
 
+	public IUsersRepository Users => _usersRepository ??= new UsersRepository(_databaseContext);
+	
 	public async Task CommitTransactionAsync(Action action)
 	{
 		await using var transaction = await _databaseContext.Database.BeginTransactionAsync();
