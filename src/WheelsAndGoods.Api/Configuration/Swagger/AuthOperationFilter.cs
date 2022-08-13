@@ -10,23 +10,28 @@ public class AuthOperationFilter : IOperationFilter
 {
 	public void Apply(OpenApiOperation operation, OperationFilterContext context)
 	{
-		var allowAnonymousAttributes = context!.MethodInfo!.DeclaringType!.GetCustomAttributes(true)
+		var attributes = context!.MethodInfo!.DeclaringType!.GetCustomAttributes(true)
 			.Union(context.MethodInfo.GetCustomAttributes(true))
-			.OfType<AllowAnonymousAttribute>();
+			.ToArray();
 
-		if (allowAnonymousAttributes.Any())
+		var allowAnonymous = attributes
+			.OfType<AllowAnonymousAttribute>()
+			.Any();
+
+		var hasAuthorizeAttribute = attributes
+			.OfType<AuthorizeAttribute>()
+			.Any();
+		
+		if (allowAnonymous || !hasAuthorizeAttribute)
 		{
 			return;
 		}
-
+		
 		var securityRequirement = new OpenApiSecurityRequirement();
 		securityRequirement.Add(
 			new OpenApiSecurityScheme
 			{
 				Reference = new OpenApiReference {Type = ReferenceType.SecurityScheme, Id = "Bearer"},
-				Scheme = "oauth2",
-				Name = "Bearer",
-				In = ParameterLocation.Header
 			}, Array.Empty<string>());
 
 		operation.Security = new[] {securityRequirement};

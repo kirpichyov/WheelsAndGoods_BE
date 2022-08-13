@@ -67,8 +67,7 @@ public class Startup
 					new OpenApiSecurityScheme
 					{
 						Name = HeaderNames.Authorization,
-						Type = SecuritySchemeType.OAuth2,
-						Scheme = "Basic",
+						Type = SecuritySchemeType.ApiKey,
 						In = ParameterLocation.Header,
 						Description = "Obtained JWT."
 					});
