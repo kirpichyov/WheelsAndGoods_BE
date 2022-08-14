@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 ENV ASPNETCORE_ENVIRONMENT=Development
-ENV ASPNETCORE_URLS=http://+:80
+#ENV ASPNETCORE_URLS=http://+:80 <-- commented for Heroku
 #ENV ASPNETCORE_URLS=http://+:80;https://+:443 <-- unable to user https yet
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
@@ -20,4 +20,5 @@ WORKDIR /app
 COPY --from=publish  /app/publish .
 CMD dotnet dev-certs https --clean
 CMD dotnet dev-certs https
-CMD dotnet WheelsAndGoods.Api.dll
+#CMD dotnet WheelsAndGoods.Api.dll <-- commented for Heroku
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet WheelsAndGoods.Api.dll
