@@ -1,9 +1,12 @@
-name: .NET
+name: Restore and Build
 
 on:
   workflow_call:
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'README.md'
+      - '**/workflows/'
 
 jobs:
   build:

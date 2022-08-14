@@ -7,8 +7,10 @@ on:
 
 jobs:
   build:
+    name: "Build and Restore"
     uses: ./.github/workflows/dotnet.yml
   deploy:
+    name: "Create docker image and deploy to Heroku"
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -29,3 +31,7 @@ jobs:
 
       - name: "Releases the container"
         run: heroku container:release web --app wheels-and-goods-api
+  migrate:
+    name: "Apply migrations to DB"
+    needs: [deploy]
+    uses: ./.github/workflows/db_migrate.yml

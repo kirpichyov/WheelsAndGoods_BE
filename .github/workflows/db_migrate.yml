@@ -1,0 +1,23 @@
+name: Update database
+
+on:
+  workflow_dispatch
+
+jobs:
+  restore_and_migrate:
+    name: "Restore and Migrate"
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: src/WheelsAndGoods.Api
+    - name: "Install EF CLI"
+      run: dotnet tool install --global dotnet-ef
+    - name: "Update database"
+      working-directory: src/WheelsAndGoods.Api
+      run: dotnet ef database update --project "/home/runner/work/WheelsAndGoods_BE/WheelsAndGoods_BE/src/WheelsAndGoods.DataAccess.Migrations/WheelsAndGoods.DataAccess.Migrations.csproj" --connection "${{secrets.DATABASE_CONTEXT}}"
