@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
@@ -9,7 +10,12 @@ using WheelsAndGoods.Api.Configuration.Middleware.Filters.Exceptions;
 using WheelsAndGoods.Api.Configuration.Swagger;
 using WheelsAndGoods.Api.Validation;
 using WheelsAndGoods.Application;
+using WheelsAndGoods.Application.Contracts;
+using WheelsAndGoods.Application.Contracts.Services;
+using WheelsAndGoods.Application.Services;
 using WheelsAndGoods.DataAccess;
+using WheelsAndGoods.DataAccess.Contracts;
+using WheelsAndGoods.DataAccess.Repositories;
 
 namespace WheelsAndGoods.Api.Configuration;
 
@@ -55,7 +61,8 @@ public class Startup
 			})
 			.ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true);
 
-		services.AddValidatorsFromAssemblyContaining<SampleValidator>();
+		services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
+		services.AddFluentValidationAutoValidation();
 
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGenNewtonsoftSupport()

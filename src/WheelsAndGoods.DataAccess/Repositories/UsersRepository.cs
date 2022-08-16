@@ -6,11 +6,12 @@ using WheelsAndGoods.DataAccess.Extensions;
 
 namespace WheelsAndGoods.DataAccess.Repositories;
 
-public class UsersRepository : IUsersRepository
+public class UsersRepository : RepositoryBase<User>, IUsersRepository
 {
 	private readonly DatabaseContext _databaseContext;
 
-	public UsersRepository(DatabaseContext databaseContext)
+	public UsersRepository(DatabaseContext databaseContext) 
+		: base(databaseContext)
 	{
 		_databaseContext = databaseContext;
 	}
@@ -22,8 +23,13 @@ public class UsersRepository : IUsersRepository
 			.FirstOrDefaultAsync(user => user.Id == userId);
 	}
 
-	public void Add(User user)
+	public async Task<bool> IsEmailExists(string email)
 	{
-		_databaseContext.Users.Add(user);
+		return await _databaseContext.Users.AnyAsync(user => user.Email == email);
+	}
+
+	public async Task<bool> IsPhoneExists(string phone)
+	{
+		return await _databaseContext.Users.AnyAsync(user => user.Phone == phone);
 	}
 }
