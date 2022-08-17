@@ -6,6 +6,7 @@ using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
 using WheelsAndGoods.Core.Exceptions;
 using WheelsAndGoods.Application.Options;
+using WheelsAndGoods.Core.Exceptions;
 using WheelsAndGoods.Core.Models.Entities;
 using WheelsAndGoods.DataAccess.Contracts;
 using WheelsAndGoods.Application.Models.Auth;
