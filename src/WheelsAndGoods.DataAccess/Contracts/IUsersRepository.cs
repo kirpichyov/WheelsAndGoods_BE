@@ -8,4 +8,5 @@ public interface IUsersRepository
 	Task<bool> IsEmailExists(string email);
 	Task<bool> IsPhoneExists(string phone);
 	void Add(User user);
+	Task<User?> GetByEmail(string email);
 }

@@ -63,6 +63,8 @@ public class Startup
 
 		services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 		services.AddFluentValidationAutoValidation();
+		services.AddValidatorsFromAssemblyContaining<SignInValidator>();
+		services.AddFluentValidationAutoValidation();
 
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGenNewtonsoftSupport()
@@ -81,6 +83,11 @@ public class Startup
 
 				options.OperationFilter<AuthOperationFilter>();
 			});
+
+		services.AddScoped<IUnitOfWork, UnitOfWork>();
+		services.AddScoped<IHashingProvider, HashingProvider>();
+		services.AddScoped<IUsersRepository, UsersRepository>();
+		services.AddScoped<IAuthService, AuthService>();
 	}
 
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
