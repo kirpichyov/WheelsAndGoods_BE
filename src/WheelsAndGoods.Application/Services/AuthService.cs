@@ -61,7 +61,7 @@ public class AuthService : IAuthService
 
 	public async Task<AuthResponse> CreateUserSession(SignInRequest request)
 	{
-		User? user = await _unitOfWork.Users.GetByEmail(request.Email);
+		var user = await _unitOfWork.Users.GetByEmail(request.Email);
 
 		if (user is null || !_hashingProvider.Verify(request.Password, user.PasswordHash))
 		{

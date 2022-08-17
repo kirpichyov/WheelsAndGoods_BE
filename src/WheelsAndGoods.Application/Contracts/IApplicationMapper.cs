@@ -10,15 +10,15 @@ public interface IApplicationMapper
 
 	public UserInfoResponse ToUserInfoResponse(User user);
 	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user);
-	public IReadOnlyCollection<TDestination>? MapCollection<TSource, TDestination>(
-		IEnumerable<TSource>? sources,
+	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
+		IEnumerable<TSource> sources,
 		Func<TSource, TDestination> rule);
 
 	public IReadOnlyCollection<TDestination> MapCollectionOrEmpty<TSource, TDestination>(
-		IEnumerable<TSource>? sources,
+		IEnumerable<TSource> sources,
 		Func<TSource, TDestination> rule);
 
-	public IEnumerable<TDestination>? MapEnumerable<TSource, TDestination>(
-		IEnumerable<TSource>? sources,
+	public IEnumerable<TDestination> MapEnumerable<TSource, TDestination>(
+		IEnumerable<TSource> sources,
 		Func<TSource, TDestination> rule);
 }

@@ -19,7 +19,7 @@ public class AuthController : ApiControllerBase
 
 	[HttpPost("register")]
 	[AllowAnonymous]
-	[ProducesResponseType(typeof(UserInfoResponse), StatusCodes.Status201Created)]
+	[ProducesResponseType(typeof(AuthResponse), StatusCodes.Status201Created)]
 	[ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Register([FromBody] RegisterRequest request)
 	{
@@ -29,7 +29,7 @@ public class AuthController : ApiControllerBase
 
 	[HttpPost("sign-in")]
 	[AllowAnonymous]
-	[ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
 	{

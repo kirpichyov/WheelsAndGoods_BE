@@ -6,7 +6,7 @@ public static class ServiceCollectionExtensions
 {
 	public static TOptions BindFromAppSettings<TOptions>(
 		this IConfiguration configuration,
-		string? sectionName = null)
+		string sectionName = null)
 		where TOptions : new()
 	{
 		var instance = new TOptions();
