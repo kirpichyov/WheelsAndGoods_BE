@@ -9,9 +9,10 @@ namespace WheelsAndGoods.Api.Validation
 		public SignInValidator()
 		{
 			RuleFor(model => model.Email)
-			.NotEmpty()
-			.Must(email => MailAddress.TryCreate(email, out _))
-			.WithMessage("{PropertyName} has invalid format");
+			.NotEmpty();
+
+			RuleFor(model => model.Password)
+				.NotEmpty();
 		}
 	}
 }

@@ -49,7 +49,7 @@ public class AuthService : IAuthService
 
 		return _mapper.ToUserInfoResponse(user);
 	}
-	public async Task<string> CreateUserSession(SignInRequest request)
+	public async Task CreateUserSession(SignInRequest request)
 	{
 		User? user = await _unitOfWork.Users.GetByEmail(request.Email);
 
@@ -57,8 +57,5 @@ public class AuthService : IAuthService
 		{
 			throw new AppValidationException("Credentials are invalid");
 		}
-		var session = Guid.NewGuid().ToString();//here need to be seesion
-
-		return session;
 	}
 }

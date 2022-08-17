@@ -33,9 +33,8 @@ public class AuthController : ApiControllerBase
 	[ProducesResponseType(StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
 	{
-		var sessionKey = await _authService.CreateUserSession(request);
+		await _authService.CreateUserSession(request);
 
-		//Response.Headers.Add(ApiHeaders.SessionKey, sessionKey);
 		return NoContent();
 	}
 }
