@@ -24,10 +24,14 @@ public class RegisterRequestValidator : PasswordRequestValidator<RegisterRequest
 
 		RuleFor(model => model.FirstName)
 			.MinimumLength(1)
-			.MaximumLength(32);
-		
+			.MaximumLength(32)
+			.Must(firstName => !firstName.Contains(' '))
+			.WithMessage("{PropertyName} contain a whitespace");
+
 		RuleFor(model => model.LastName)
 			.MinimumLength(1)
-			.MaximumLength(32);
+			.MaximumLength(32)
+			.Must(lastName => !lastName.Contains(' '))
+			.WithMessage("{PropertyName} contain a whitespace");
 	}
 }

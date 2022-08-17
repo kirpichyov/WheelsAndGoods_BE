@@ -63,6 +63,8 @@ public class Startup
 
 		services.AddValidatorsFromAssemblyContaining<RegisterRequestValidator>();
 		services.AddFluentValidationAutoValidation();
+		
+		ValidatorOptions.Global.LanguageManager.Enabled = false;
 
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGenNewtonsoftSupport()
