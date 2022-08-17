@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Kirpichyov.FriendlyJwt.DependencyInjection;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Converters;
@@ -10,12 +11,9 @@ using WheelsAndGoods.Api.Configuration.Middleware.Filters.Exceptions;
 using WheelsAndGoods.Api.Configuration.Swagger;
 using WheelsAndGoods.Api.Validation;
 using WheelsAndGoods.Application;
-using WheelsAndGoods.Application.Contracts;
-using WheelsAndGoods.Application.Contracts.Services;
-using WheelsAndGoods.Application.Services;
+using WheelsAndGoods.Application.Options;
+using WheelsAndGoods.Core;
 using WheelsAndGoods.DataAccess;
-using WheelsAndGoods.DataAccess.Contracts;
-using WheelsAndGoods.DataAccess.Repositories;
 
 namespace WheelsAndGoods.Api.Configuration;
 
@@ -34,7 +32,9 @@ public class Startup
 	{
 		services.AddHttpContextAccessor();
 
-		// services.AddFriendlyJwt();
+		services.AddFriendlyJwt();
+		services.Configure<AuthOptions>(_configuration.GetSection(nameof(AuthOptions)));
+
 
 		services.AddDataAccessServices(_configuration, _environment);
 		services.AddApplicationServices(_configuration);
@@ -49,11 +49,11 @@ public class Startup
 					new StringEnumConverter(new CamelCaseNamingStrategy())
 				);
 			})
-			// .AddFriendlyJwtAuthentication(configuration =>
-			// {
-			//     //var authOptions = _configuration.BindFromAppSettings<AuthOptions>();
-			//     //configuration.Bind(authOptions);
-			// })
+			 .AddFriendlyJwtAuthentication(configuration =>
+			 {
+				 var authOptions = _configuration.BindFromAppSettings<AuthOptions>();
+				 configuration.Bind(authOptions);
+			 })
 			.AddMvcOptions(options =>
 			{
 				options.Filters.Add<ExceptionFilter>();
@@ -68,7 +68,7 @@ public class Startup
 		services.AddSwaggerGenNewtonsoftSupport()
 			.AddSwaggerGen(options =>
 			{
-				options.SwaggerDoc("v1", new OpenApiInfo {Version = "v1", Title = "WheelsAndGoods API"});
+				options.SwaggerDoc("v1", new OpenApiInfo { Version = "v1", Title = "WheelsAndGoods API" });
 
 				options.AddSecurityDefinition("Bearer",
 					new OpenApiSecurityScheme
@@ -105,11 +105,11 @@ public class Startup
 		{
 			app.UseCors(builder =>
 			{
-				// var authOptions = _configuration.BindFromAppSettings<AuthOptions>();
+				var authOptions = _configuration.BindFromAppSettings<AuthOptions>();
 
 				builder.AllowAnyHeader();
 				builder.AllowAnyMethod();
-				// builder.WithOrigins(authOptions.CorsAllowedList);
+				builder.WithOrigins(authOptions.CorsAllowedList);
 			});
 		}
 

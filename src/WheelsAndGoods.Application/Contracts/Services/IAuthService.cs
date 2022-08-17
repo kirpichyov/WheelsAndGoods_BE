@@ -7,5 +7,5 @@ namespace WheelsAndGoods.Application.Contracts.Services;
 public interface IAuthService
 {
 	Task CreateUserSession(SignInRequest request);
-	Task<UserInfoResponse> CreateUser(RegisterRequest request);
+	Task<UserResponse> CreateUser(RegisterRequest request);
 }
