@@ -4,6 +4,8 @@ using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
 using WheelsAndGoods.Core.Models.Entities;
 using WheelsAndGoods.DataAccess.Contracts;
+using WheelsAndGoods.Application.Models.Auth;
+using WheelsAndGoods.Core.Exceptions;
 
 namespace WheelsAndGoods.Application.Services;
 
@@ -28,23 +30,32 @@ public class AuthService : IAuthService
 		{
 			throw new ApplicationException("Email is already in use");
 		}
-		
+
 		bool phoneInUse = await _unitOfWork.Users.IsPhoneExists(request.Phone);
 
 		if (phoneInUse)
 		{
 			throw new ApplicationException("Phone is already in use");
 		}
-        
+
 		User user = _mapper.ToUser(request, _hashingProvider);
-		
+
 		await _unitOfWork.CommitTransactionAsync(() =>
 		{
 			_unitOfWork.Users.Add(user);
 		});
-		
+
 		// TODO: Add creation JWT for user
-		
+
 		return _mapper.ToUserInfoResponse(user);
+	}
+	public async Task CreateUserSession(SignInRequest request)
+	{
+		User? user = await _unitOfWork.Users.GetByEmail(request.Email);
+
+		if (user is null || !_hashingProvider.Verify(request.Password, user.PasswordHash))
+		{
+			throw new AppValidationException("Credentials are invalid");
+		}
 	}
 }
