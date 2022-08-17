@@ -32,4 +32,9 @@ public class UsersRepository : RepositoryBase<User>, IUsersRepository
 	{
 		return await _databaseContext.Users.AnyAsync(user => user.Phone == phone);
 	}
+
+	public async Task<User?> GetByEmail(string email)
+	{
+		return await _databaseContext.Users.FirstOrDefaultAsync(user => user.Email == email);
+	}
 }

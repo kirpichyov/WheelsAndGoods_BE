@@ -35,6 +35,15 @@ public class ApplicationMapper : IApplicationMapper
 		};
 	}
 
+	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user)
+	{
+		return new AuthResponse()
+		{
+			Jwt = jwtResponse,
+			User = ToUserInfoResponse(user),
+		};
+	}
+
 	public IReadOnlyCollection<TDestination>? MapCollection<TSource, TDestination>(IEnumerable<TSource>? sources, Func<TSource, TDestination> rule)
 	{
 		return sources?.Select(rule).ToArray();
