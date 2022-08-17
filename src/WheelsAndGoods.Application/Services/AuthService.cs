@@ -4,6 +4,7 @@ using WheelsAndGoods.Application.Contracts;
 using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
+using WheelsAndGoods.Core.Exceptions;
 using WheelsAndGoods.Application.Options;
 using WheelsAndGoods.Core.Models.Entities;
 using WheelsAndGoods.DataAccess.Contracts;
@@ -37,14 +38,14 @@ public class AuthService : IAuthService
 
 		if (emailInUse)
 		{
-			throw new ApplicationException("Email is already in use");
+			throw new AppValidationException("Email is already in use");
 		}
 
 		bool phoneInUse = await _unitOfWork.Users.IsPhoneExists(request.Phone);
 
 		if (phoneInUse)
 		{
-			throw new ApplicationException("Phone is already in use");
+			throw new AppValidationException("Phone is already in use");
 		}
 
 		User user = _mapper.ToUser(request, _hashingProvider);

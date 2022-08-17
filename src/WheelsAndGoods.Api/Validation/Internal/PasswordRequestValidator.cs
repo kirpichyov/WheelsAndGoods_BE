@@ -16,6 +16,8 @@ public class PasswordRequestValidator<T> : AbstractValidator<T>
 
 		RuleFor(model => model.Password)
 			.NotEmpty()
+			.Must(password => !password.Contains(' '))
+			.WithMessage("{PropertyName} contain a whitespace")
 			.Must(password => Regex.IsMatch(password, @"(?=.*[\W_])"))
 			.WithMessage("{PropertyName} must have at least 1 special character")
 			.Must(password => Regex.IsMatch(password, @"(?=.*\d)"))
