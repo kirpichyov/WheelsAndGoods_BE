@@ -35,9 +35,9 @@ public class ApplicationMapper : IApplicationMapper
 		};
 	}
 
-	public UserResponse ToUserResponse(JwtResponse jwtResponse, User user)
+	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user)
 	{
-		return new UserResponse()
+		return new AuthResponse()
 		{
 			Jwt = jwtResponse,
 			User = ToUserInfoResponse(user),

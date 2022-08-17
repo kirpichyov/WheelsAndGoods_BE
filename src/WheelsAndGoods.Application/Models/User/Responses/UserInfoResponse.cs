@@ -1,6 +1,4 @@
-﻿using WheelsAndGoods.Core.Models.Enums;
-
-namespace WheelsAndGoods.Application.Models.User.Responses;
+﻿namespace WheelsAndGoods.Application.Models.User.Responses;
 
 public class UserInfoResponse
 {

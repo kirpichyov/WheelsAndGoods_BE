@@ -31,7 +31,7 @@ public class AuthService : IAuthService
 		_authOptions = options.Value;
 	}
 
-	public async Task<UserResponse> CreateUser(RegisterRequest request)
+	public async Task<AuthResponse> CreateUser(RegisterRequest request)
 	{
 		bool emailInUse = await _unitOfWork.Users.IsEmailExists(request.Email);
 
@@ -58,7 +58,7 @@ public class AuthService : IAuthService
 		return _mapper.ToUserResponse(jwtResponse, user);
 	}
 
-	public async Task<UserResponse> CreateUserSession(SignInRequest request)
+	public async Task<AuthResponse> CreateUserSession(SignInRequest request)
 	{
 		User? user = await _unitOfWork.Users.GetByEmail(request.Email);
 

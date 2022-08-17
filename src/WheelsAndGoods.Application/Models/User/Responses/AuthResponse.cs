@@ -1,6 +1,6 @@
 ﻿namespace WheelsAndGoods.Application.Models.User.Responses
 {
-	public class UserResponse
+	public class AuthResponse
 	{
 		public JwtResponse Jwt { get; set; }
 		public UserInfoResponse User { get; set; }

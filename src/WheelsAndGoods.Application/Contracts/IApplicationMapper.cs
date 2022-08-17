@@ -9,7 +9,7 @@ public interface IApplicationMapper
 	public User ToUser(RegisterRequest request, IHashingProvider hashingProvider);
 
 	public UserInfoResponse ToUserInfoResponse(User user);
-	public UserResponse ToUserResponse(JwtResponse jwtResponse, User user);
+	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user);
 	public IReadOnlyCollection<TDestination>? MapCollection<TSource, TDestination>(
 		IEnumerable<TSource>? sources,
 		Func<TSource, TDestination> rule);
