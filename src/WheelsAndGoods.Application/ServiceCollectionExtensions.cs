@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
 		IConfiguration configuration)
     {
         services.Configure<BlobOptions>(configuration.GetSection(nameof(BlobOptions)));
+        services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
         
 		services.AddScoped<IApplicationMapper, ApplicationMapper>();
 		services.AddScoped<IHashingProvider, HashingProvider>();
@@ -22,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUsersService, UsersService>();
 
         services.AddSingleton<IBlobService, BlobService>();
+        services.AddSingleton<IEmailSenderService, EmailSenderService>();
 
 		return services;
 	}
