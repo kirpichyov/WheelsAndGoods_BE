@@ -26,7 +26,7 @@ namespace WheelsAndGoods.Api.Validation
                 .NotEmpty()
                 .MaximumLength(128);
 
-            RuleFor(model => model.DeliveryDeadlinAtUtc)
+            RuleFor(model => model.DeliveryDeadlineAtUtc)
                 .NotEmpty()
                 .GreaterThan(model => DateTime.UtcNow)
                 .WithMessage("Delivery deadline must be greater than now")

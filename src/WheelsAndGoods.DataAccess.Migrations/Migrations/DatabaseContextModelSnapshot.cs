@@ -38,9 +38,9 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
 
-                    b.Property<DateTime>("DeliveryDeadlinеAtUtc")
+                    b.Property<DateTime>("DeliveryDeadlineAtUtc")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("delivery_deadlinе_at_utc");
+                        .HasColumnName("delivery_deadline_at_utc");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")

@@ -51,7 +51,7 @@ public class ApplicationMapper : IApplicationMapper
 		{
 			Title = createOrderRequest.Title,
 			Cargo = createOrderRequest.Cargo,
-			DeliveryDeadlineAtUtc = createOrderRequest.DeliveryDeadlinAtUtc,
+			DeliveryDeadlineAtUtc = createOrderRequest.DeliveryDeadlineAtUtc,
 			Description = createOrderRequest.Description,
 			From = createOrderRequest.From,
 			To = createOrderRequest.To,
@@ -60,7 +60,7 @@ public class ApplicationMapper : IApplicationMapper
 		};
     }
 
-	public CreateOrderResponse ToCreateOrderResponce(Order order, User user)
+	public CreateOrderResponse ToCreateOrderResponse(Order order, User user)
 	{
 		return new CreateOrderResponse()
 		{

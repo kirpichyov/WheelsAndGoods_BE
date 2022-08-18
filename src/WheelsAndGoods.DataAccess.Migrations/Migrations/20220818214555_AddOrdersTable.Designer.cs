@@ -12,7 +12,7 @@ using WheelsAndGoods.DataAccess.Connection;
 namespace WheelsAndGoods.DataAccess.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220818192303_AddOrdersTable")]
+    [Migration("20220818214555_AddOrdersTable")]
     partial class AddOrdersTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,9 +40,9 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("customer_id");
 
-                    b.Property<DateTime>("DeliveryDeadlinAtUtc")
+                    b.Property<DateTime>("DeliveryDeadlineAtUtc")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("delivery_deadlin_at_utc");
+                        .HasColumnName("delivery_deadline_at_utc");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")

@@ -19,7 +19,7 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                     description = table.Column<string>(type: "text", nullable: true),
                     from = table.Column<string>(type: "text", nullable: false),
                     to = table.Column<string>(type: "text", nullable: false),
-                    delivery_deadlinе_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    delivery_deadline_at_utc = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     price = table.Column<decimal>(type: "numeric", nullable: false),
                     customer_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },

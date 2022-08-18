@@ -27,7 +27,7 @@ namespace WheelsAndGoods.Application.Services
 
         public async Task<CreateOrderResponse> CreateOrder(CreateOrderRequest createOrderRequest)
         {
-            var user = await _unitOfWork.Users.GetById(Guid.Parse(_tokenReader.UserId), false);
+            var user = await _unitOfWork.Users.GetById(Guid.Parse(_tokenReader.UserId), true);
 
             if (user is null)
             {
@@ -40,7 +40,7 @@ namespace WheelsAndGoods.Application.Services
                 _unitOfWork.Orders.Add(order);
             });
 
-            var responce = _applicationMapper.ToCreateOrderResponce(order, user);
+            var responce = _applicationMapper.ToCreateOrderResponse(order, user);
 
             return responce;
         }

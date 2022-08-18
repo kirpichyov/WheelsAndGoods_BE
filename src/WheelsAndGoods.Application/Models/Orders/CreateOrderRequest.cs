@@ -13,7 +13,7 @@ namespace WheelsAndGoods.Application.Models.Orders
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }
-        public DateTime DeliveryDeadlinAtUtc { get; set; }
+        public DateTime DeliveryDeadlineAtUtc { get; set; }
         public decimal Price { get; set; }
     }
 }
