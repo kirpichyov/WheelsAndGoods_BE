@@ -10,6 +10,7 @@ public class UnitOfWork : IUnitOfWork
 	private readonly ILogger<UnitOfWork> _logger;
 
 	private IUsersRepository? _usersRepository;
+	private IOrdersRepository? _ordersRepository;
 
 	public UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger)
 	{
@@ -18,6 +19,7 @@ public class UnitOfWork : IUnitOfWork
 	}
 
 	public IUsersRepository Users => _usersRepository ??= new UsersRepository(_databaseContext);
+	public IOrdersRepository Orders => _ordersRepository ??= new OrdersRepository(_databaseContext);
 	
 	public async Task CommitTransactionAsync(Action action)
 	{
