@@ -9,6 +9,7 @@ namespace WheelsAndGoods.Core.Models.Entities
     public class Order : EntityBase<Guid>
     {
         public Order()
+            :base(Guid.NewGuid())
         {
         }
 
