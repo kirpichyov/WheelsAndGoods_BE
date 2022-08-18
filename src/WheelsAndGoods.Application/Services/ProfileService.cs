@@ -31,7 +31,7 @@ namespace WheelsAndGoods.Application.Services
 
             if (!_hashingProvider.Verify(request.CurrentPassword, user.PasswordHash))
             {
-                throw new AppValidationException("Password are invalid");
+                throw new AppValidationException("Password is invalid");
             }
 
             if (_hashingProvider.Verify(request.Password, user.PasswordHash))
