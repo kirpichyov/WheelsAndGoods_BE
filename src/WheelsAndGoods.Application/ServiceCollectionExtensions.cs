@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
 		services.AddScoped<IHashingProvider, HashingProvider>();
 		services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUsersService, UsersService>();
+		services.AddScoped<IProfileService, ProfileService>();
 
 		return services;
 	}

@@ -17,7 +17,7 @@ public class User : EntityBase<Guid>
 	}
 
 	public string Email { get; }
-	public string PasswordHash { get; }
+	public string PasswordHash { get; set; }
 	public Role Role { get; }
 	public string? Firstname { get; private set; }
 	public string? Lastname { get; private set; }
