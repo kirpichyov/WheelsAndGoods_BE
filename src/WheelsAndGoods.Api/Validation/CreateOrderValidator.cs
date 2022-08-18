@@ -30,14 +30,15 @@ namespace WheelsAndGoods.Api.Validation
                 .NotEmpty()
                 .GreaterThan(model => DateTime.UtcNow)
                 .WithMessage("Delivery deadline must be greater than now")
-                .Must(model => model.Kind == DateTimeKind.Utc);
+                .Must(model => model.Kind == DateTimeKind.Utc)
+                .WithMessage("DeliveryDeadlinеAtUtc should be represented by UTC");
 
             RuleFor(model => model.Price)
                 .NotEmpty()
-                .GreaterThan(1)
-                .WithMessage("Price must be greater than 1")
+                .GreaterThan(0)
+                .WithMessage("Price must be greater than 0")
                 .LessThan(decimal.MaxValue)
-                .WithMessage("Price is to big");
+                .WithMessage("Price is too big");
         }
     }
 }

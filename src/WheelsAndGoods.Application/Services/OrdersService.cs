@@ -17,6 +17,7 @@ namespace WheelsAndGoods.Application.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IJwtTokenReader _tokenReader;
         private readonly IApplicationMapper _applicationMapper;
+
         public OrdersService(IUnitOfWork unitOfWork, IJwtTokenReader jwtTokenReader, IApplicationMapper applicationMapper)
         {
             _unitOfWork = unitOfWork;
@@ -24,7 +25,7 @@ namespace WheelsAndGoods.Application.Services
             _applicationMapper = applicationMapper;
         }
 
-        public async Task<CreateOrderResponce> CreateOrder(CreateOrderRequest createOrderRequest)
+        public async Task<CreateOrderResponse> CreateOrder(CreateOrderRequest createOrderRequest)
         {
             var user = await _unitOfWork.Users.GetById(Guid.Parse(_tokenReader.UserId), false);
 
@@ -33,20 +34,13 @@ namespace WheelsAndGoods.Application.Services
                 throw new NotFoundException("Customer not found");
             }
 
-            var order = _applicationMapper.ToOrder(createOrderRequest);
-            order.CustomerId = user.Id;
+            var order = _applicationMapper.ToOrder(createOrderRequest, user);
             await _unitOfWork.CommitTransactionAsync(() =>
             {
                 _unitOfWork.Orders.Add(order);
             });
 
-            var responce = _applicationMapper.ToCreateOrderResponce(order);
-            responce.Customer = new Customer
-            {
-                FirstName = user.Firstname,
-                LastName = user.Lastname,
-                Phone = user.Phone
-            };
+            var responce = _applicationMapper.ToCreateOrderResponce(order, user);
 
             return responce;
         }

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace WheelsAndGoods.Application.Models.Orders
 {
-    public class CreateOrderResponce
+    public class CreateOrderResponse
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public string Cargo { get; set; }
         public string Description { get; set; }

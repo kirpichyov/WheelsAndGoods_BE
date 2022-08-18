@@ -9,13 +9,14 @@ namespace WheelsAndGoods.Api.Controllers
     public class OrdersController : ApiControllerBase
     {
         private readonly IOrdersService _ordersService;
+
         public OrdersController(IOrdersService ordersService)
         {
             _ordersService = ordersService;
         }
 
-        [HttpPost()]
-        [ProducesResponseType(typeof(CreateOrderResponce), StatusCodes.Status201Created)]
+        [HttpPost]
+        [ProducesResponseType(typeof(CreateOrderResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
         {

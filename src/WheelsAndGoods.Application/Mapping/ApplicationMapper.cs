@@ -45,31 +45,39 @@ public class ApplicationMapper : IApplicationMapper
 		};
 	}
 
-	public Order ToOrder(CreateOrderRequest createOrderRequest)
+	public Order ToOrder(CreateOrderRequest createOrderRequest, User customer)
     {
 		return new Order()
 		{
 			Title = createOrderRequest.Title,
 			Cargo = createOrderRequest.Cargo,
-			DeliveryDeadlinAtUtc = createOrderRequest.DeliveryDeadlinAtUtc,
+			DeliveryDeadlineAtUtc = createOrderRequest.DeliveryDeadlinAtUtc,
 			Description = createOrderRequest.Description,
 			From = createOrderRequest.From,
 			To = createOrderRequest.To,
-			Price = createOrderRequest.Price
+			Price = createOrderRequest.Price,
+			Customer = customer
 		};
     }
 
-	public CreateOrderResponce ToCreateOrderResponce(Order order)
+	public CreateOrderResponse ToCreateOrderResponce(Order order, User user)
 	{
-		return new CreateOrderResponce()
+		return new CreateOrderResponse()
 		{
+			Id = order.Id,
 			Title = order.Title,
 			Cargo = order.Cargo,
-			DeliveryDeadlinAtUtc = order.DeliveryDeadlinAtUtc,
+			DeliveryDeadlinAtUtc = order.DeliveryDeadlineAtUtc,
 			Description = order.Description,
 			From = order.From,
 			To = order.To,
-			Price = order.Price
+			Price = order.Price,
+			Customer = new Customer
+            {
+				FirstName = user.Firstname,
+				LastName = user.Lastname,
+				Phone = user.Phone
+            }
 		};
 	}
 
