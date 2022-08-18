@@ -25,6 +25,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IBlobService, BlobService>();
         services.AddSingleton<IEmailSenderService, EmailSenderService>();
+        services.AddScoped<IOrdersService, OrdersService>();
 
 		return services;
 	}
