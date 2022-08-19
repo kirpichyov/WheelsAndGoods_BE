@@ -3,7 +3,8 @@
 public interface IUnitOfWork
 {
 	IUsersRepository Users { get; }
-	IOrdersRepository Orders { get; }
+    IRefreshTokenRepository RefreshTokens { get; }
+    IOrdersRepository Orders { get; }
 	
 	Task CommitTransactionAsync(Action action);
 	Task CommitTransactionAsync(Func<Task> action);

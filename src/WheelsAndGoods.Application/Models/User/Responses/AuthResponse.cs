@@ -3,7 +3,8 @@
 	public class AuthResponse
 	{
 		public JwtResponse Jwt { get; set; }
+        public RefreshTokenRespone RefreshToken { get; set; }
 		public UserInfoResponse User { get; set; }
-	}
+    }
 }
 
