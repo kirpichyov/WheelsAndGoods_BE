@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WheelsAndGoods.DataAccess.Connection;
@@ -11,9 +12,10 @@ using WheelsAndGoods.DataAccess.Connection;
 namespace WheelsAndGoods.DataAccess.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220819173633_AddCreatedAtUtcColumnToOrderTable")]
+    partial class AddCreatedAtUtcColumnToOrderTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,14 +118,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<Guid?>("AvatarBlobName")
-                        .HasColumnType("uuid")
-                        .HasColumnName("avatar_blob_name");
-
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("avatar_url");
 
                     b.Property<string>("Email")
                         .IsRequired()

@@ -37,23 +37,15 @@ public class ApplicationMapper : IApplicationMapper
 		};
 	}
 
-	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user)
-	{
-		return new AuthResponse()
-		{
-			Jwt = jwtResponse,
-			User = ToUserInfoResponse(user),
-		};
-	}
-
-	public Order ToOrder(CreateOrderRequest createOrderRequest, User customer)
+    public Order ToOrder(CreateOrderRequest createOrderRequest, User customer)
     {
 		return new Order()
 		{
 			Title = createOrderRequest.Title,
 			Cargo = createOrderRequest.Cargo,
 			DeliveryDeadlineAtUtc = createOrderRequest.DeliveryDeadlineAtUtc,
-			Description = createOrderRequest.Description,
+            CreatedAtUtc = DateTime.UtcNow,
+            Description = createOrderRequest.Description,
 			From = createOrderRequest.From,
 			To = createOrderRequest.To,
 			Price = createOrderRequest.Price,
@@ -61,26 +53,37 @@ public class ApplicationMapper : IApplicationMapper
 		};
     }
 
-	public CreateOrderResponse ToCreateOrderResponse(Order order, User user)
+	public OrderResponse ToOrderResponse(Order order)
 	{
-		return new CreateOrderResponse()
+		return new OrderResponse()
 		{
 			Id = order.Id,
 			Title = order.Title,
 			Cargo = order.Cargo,
-			DeliveryDeadlinAtUtc = order.DeliveryDeadlineAtUtc,
+			DeliveryDeadlineAtUtc = order.DeliveryDeadlineAtUtc,
+            CreatedAtUtc = order.CreatedAtUtc,
 			Description = order.Description,
 			From = order.From,
 			To = order.To,
 			Price = order.Price,
 			Customer = new Customer
             {
-				FirstName = user.Firstname,
-				LastName = user.Lastname,
-				Phone = user.Phone
+				FirstName = order.Customer.Firstname,
+				LastName = order.Customer.Lastname,
+				Phone = order.Customer.Phone
             }
 		};
 	}
+    
+    public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user)
+    {
+        return new UserCreatedResponse()
+        {
+            Jwt = authResponse.Jwt,
+            RefreshToken = authResponse.RefreshToken,
+            User = ToUserInfoResponse(user),
+        };
+    }
 
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources, Func<TSource, TDestination> rule)
 	{

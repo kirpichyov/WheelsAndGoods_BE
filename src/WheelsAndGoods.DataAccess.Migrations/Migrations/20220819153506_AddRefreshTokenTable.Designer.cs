@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WheelsAndGoods.DataAccess.Connection;
@@ -11,9 +12,10 @@ using WheelsAndGoods.DataAccess.Connection;
 namespace WheelsAndGoods.DataAccess.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220819153506_AddRefreshTokenTable")]
+    partial class AddRefreshTokenTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,62 +23,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.Order", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Cargo")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("cargo");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_at_utc");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("customer_id");
-
-                    b.Property<DateTime>("DeliveryDeadlineAtUtc")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("delivery_deadline_at_utc");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
-
-                    b.Property<string>("From")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("from");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
-                        .HasColumnName("price");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("title");
-
-                    b.Property<string>("To")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("to");
-
-                    b.HasKey("Id")
-                        .HasName("pk_orders");
-
-                    b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_orders_customer_id");
-
-                    b.ToTable("orders", (string)null);
-                });
 
             modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.RefreshToken", b =>
                 {
@@ -117,14 +63,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("AvatarBlobName")
-                        .HasColumnType("uuid")
-                        .HasColumnName("avatar_blob_name");
-
-                    b.Property<string>("AvatarUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("avatar_url");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
@@ -158,18 +96,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.Order", b =>
-                {
-                    b.HasOne("WheelsAndGoods.Core.Models.Entities.User", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_orders_users_customer_temp_id");
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.RefreshToken", b =>
                 {
                     b.HasOne("WheelsAndGoods.Core.Models.Entities.User", "User")
@@ -177,7 +103,7 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_refresh_tokens_users_user_temp_id1");
+                        .HasConstraintName("fk_refresh_tokens_users_user_temp_id");
 
                     b.Navigation("User");
                 });

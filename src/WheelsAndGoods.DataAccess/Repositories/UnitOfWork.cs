@@ -10,6 +10,7 @@ public class UnitOfWork : IUnitOfWork
 	private readonly ILogger<UnitOfWork> _logger;
 
 	private IUsersRepository? _usersRepository;
+    private IRefreshTokenRepository? _refreshTokenRepository;
 	private IOrdersRepository? _ordersRepository;
 
 	public UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger)
@@ -19,6 +20,7 @@ public class UnitOfWork : IUnitOfWork
 	}
 
 	public IUsersRepository Users => _usersRepository ??= new UsersRepository(_databaseContext);
+	public IRefreshTokenRepository RefreshTokens => _refreshTokenRepository ??= new RefreshTokenRepository(_databaseContext);
 	public IOrdersRepository Orders => _ordersRepository ??= new OrdersRepository(_databaseContext);
 	
 	public async Task CommitTransactionAsync(Action action)
@@ -56,4 +58,24 @@ public class UnitOfWork : IUnitOfWork
 			throw;
 		}
 	}
+    
+    public async Task<TResult> CommitTransactionAsync<TResult>(Func<TResult> action)
+    {
+        await using var transaction = await _databaseContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            var result = action();
+            await _databaseContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return result;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Exception occured in transaction: {Message}.", exception.Message);
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }

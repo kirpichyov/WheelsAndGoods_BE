@@ -4,5 +4,6 @@ namespace WheelsAndGoods.DataAccess.Contracts
 {
     public interface IOrdersRepository : IRepositoryBase<Order>
     {
+        Task<IReadOnlyCollection<Order>> GetOrders();
     }
 }

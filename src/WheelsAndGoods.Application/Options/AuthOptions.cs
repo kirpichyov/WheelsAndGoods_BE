@@ -5,6 +5,7 @@
 		public string Issuer { get; set; }
 		public string Audience { get; set; }
 		public int AccessTokenTTLMinutes { get; set; }
+        public int RefreshTokenTTLMinutes { get; set; }
 		public string Secret { get; set; }
 		public string[] CorsAllowedList { get; set; }
 	}
