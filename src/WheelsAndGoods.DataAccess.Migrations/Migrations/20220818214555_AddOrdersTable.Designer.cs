@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WheelsAndGoods.DataAccess.Connection;
@@ -11,9 +12,10 @@ using WheelsAndGoods.DataAccess.Connection;
 namespace WheelsAndGoods.DataAccess.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220818214555_AddOrdersTable")]
+    partial class AddOrdersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,38 +23,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("AccessTokenId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("access_token_id");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_at_utc");
-
-                    b.Property<bool>("IsInvalidated")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_invalidated");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_refresh_tokens");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_refresh_tokens_user_id");
-
-                    b.ToTable("refresh_tokens", (string)null);
-                });
 
             modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.Order", b =>
                 {
@@ -156,18 +126,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .HasConstraintName("fk_orders_users_customer_temp_id");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("WheelsAndGoods.Core.Models.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_refresh_tokens_users_user_temp_id");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

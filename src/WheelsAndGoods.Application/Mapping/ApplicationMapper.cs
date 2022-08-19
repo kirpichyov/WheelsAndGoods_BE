@@ -1,4 +1,5 @@
 ﻿using WheelsAndGoods.Application.Contracts;
+using WheelsAndGoods.Application.Models.Orders;
 using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
 using WheelsAndGoods.Core.Models.Entities;
@@ -41,6 +42,42 @@ public class ApplicationMapper : IApplicationMapper
 		{
 			Jwt = jwtResponse,
 			User = ToUserInfoResponse(user),
+		};
+	}
+
+	public Order ToOrder(CreateOrderRequest createOrderRequest, User customer)
+    {
+		return new Order()
+		{
+			Title = createOrderRequest.Title,
+			Cargo = createOrderRequest.Cargo,
+			DeliveryDeadlineAtUtc = createOrderRequest.DeliveryDeadlineAtUtc,
+			Description = createOrderRequest.Description,
+			From = createOrderRequest.From,
+			To = createOrderRequest.To,
+			Price = createOrderRequest.Price,
+			Customer = customer
+		};
+    }
+
+	public CreateOrderResponse ToCreateOrderResponse(Order order, User user)
+	{
+		return new CreateOrderResponse()
+		{
+			Id = order.Id,
+			Title = order.Title,
+			Cargo = order.Cargo,
+			DeliveryDeadlinAtUtc = order.DeliveryDeadlineAtUtc,
+			Description = order.Description,
+			From = order.From,
+			To = order.To,
+			Price = order.Price,
+			Customer = new Customer
+            {
+				FirstName = user.Firstname,
+				LastName = user.Lastname,
+				Phone = user.Phone
+            }
 		};
 	}
 

@@ -11,6 +11,7 @@ public class UnitOfWork : IUnitOfWork
 
 	private IUsersRepository? _usersRepository;
     private IRefreshTokenRepository? _refreshTokenRepository;
+	private IOrdersRepository? _ordersRepository;
 
 	public UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger)
 	{
@@ -20,6 +21,7 @@ public class UnitOfWork : IUnitOfWork
 
 	public IUsersRepository Users => _usersRepository ??= new UsersRepository(_databaseContext);
 	public IRefreshTokenRepository RefreshTokens => _refreshTokenRepository ??= new RefreshTokenRepository(_databaseContext);
+	public IOrdersRepository Orders => _ordersRepository ??= new OrdersRepository(_databaseContext);
 	
 	public async Task CommitTransactionAsync(Action action)
 	{
