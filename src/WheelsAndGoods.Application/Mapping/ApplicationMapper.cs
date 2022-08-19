@@ -84,42 +84,16 @@ public class ApplicationMapper : IApplicationMapper
         };
     }
 
-	public Order ToUpdatedOrder(UpdateOrderRequest updateOrderRequest, Guid orderId, User customer)
+	public void ToUpdatedOrder(UpdateOrderRequest updateOrderRequest, Order order)
 	{
-		return new Order(orderId)
-		{
-			Title = updateOrderRequest.Title,
-			Cargo = updateOrderRequest.Cargo,
-			DeliveryDeadlineAtUtc = updateOrderRequest.DeliveryDeadlineAtUtc,
-			Description = updateOrderRequest.Description,
-			From = updateOrderRequest.From,
-			To = updateOrderRequest.To,
-			Price = updateOrderRequest.Price,
-			Customer = customer
-		};
+		order.Title = updateOrderRequest.Title;
+		order.Cargo = updateOrderRequest.Cargo;
+		order.DeliveryDeadlineAtUtc = updateOrderRequest.DeliveryDeadlineAtUtc;
+		order.Description = updateOrderRequest.Description;
+		order.From = updateOrderRequest.From;
+		order.To = updateOrderRequest.To;
+		order.Price = updateOrderRequest.Price;
 	}
-
-	public OrderResponse ToOrderResponse(Order order, User user)
-	{
-		return new OrderResponse()
-		{
-			Id = order.Id,
-			Title = order.Title,
-			Cargo = order.Cargo,
-			DeliveryDeadlineAtUtc = order.DeliveryDeadlineAtUtc,
-			Description = order.Description,
-			From = order.From,
-			To = order.To,
-			Price = order.Price,
-			Customer = new Customer
-			{
-				FirstName = user.Firstname,
-				LastName = user.Lastname,
-				Phone = user.Phone
-			}
-		};
-	}
-
 
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources, Func<TSource, TDestination> rule)
 	{

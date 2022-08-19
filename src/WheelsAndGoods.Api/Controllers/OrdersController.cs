@@ -33,12 +33,12 @@ namespace WheelsAndGoods.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateOrder([FromRoute] Guid id, [FromBody] UpdateOrderRequest request)
         {
             var result = await _ordersService.UpdateOrder(request, id);
-            return StatusCode(StatusCodes.Status201Created, result);
+            return StatusCode(StatusCodes.Status200OK, result);
         }
     }
 }

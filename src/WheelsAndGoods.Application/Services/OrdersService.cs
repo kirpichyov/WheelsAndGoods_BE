@@ -49,7 +49,7 @@ namespace WheelsAndGoods.Application.Services
 
         public async Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId)
         {
-            var order = await _unitOfWork.Orders.GetById(orderId, false);
+            var order = await _unitOfWork.Orders.GetById(orderId, true);
 
             if (order is null)
             {
@@ -59,14 +59,13 @@ namespace WheelsAndGoods.Application.Services
             {
                 throw new AccessDeniedException("User has no access to this order");
             }
-
-            var updatedOrder = _applicationMapper.ToUpdatedOrder(updateOrderRequest, orderId, order.Customer);
+            
             await _unitOfWork.CommitTransactionAsync(() =>
             {
-                _unitOfWork.Orders.Update(updatedOrder);
+                _applicationMapper.ToUpdatedOrder(updateOrderRequest, order);
             });
 
-            return _applicationMapper.ToOrderResponse(updatedOrder, order.Customer);
+            return _applicationMapper.ToOrderResponse(order);
         }
     }
 }
