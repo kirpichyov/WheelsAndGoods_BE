@@ -19,7 +19,7 @@ public class AuthController : ApiControllerBase
 
 	[HttpPost("register")]
 	[AllowAnonymous]
-	[ProducesResponseType(typeof(AuthResponse), StatusCodes.Status201Created)]
+	[ProducesResponseType(typeof(UserCreatedResponse), StatusCodes.Status201Created)]
 	[ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
 	public async Task<IActionResult> Register([FromBody] RegisterRequest request)
 	{
@@ -36,4 +36,14 @@ public class AuthController : ApiControllerBase
 		var result = await _authService.CreateUserSession(request);
 		return Ok(result);
 	}
+
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> Refresh([FromBody] RefreshTokenRequest request)
+    {
+        var result = await _authService.RefreshToken(request);
+        return Ok(result);
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using Kirpichyov.FriendlyJwt;
+using Kirpichyov.FriendlyJwt.Contracts;
 using Microsoft.Extensions.Options;
 using WheelsAndGoods.Application.Contracts;
 using WheelsAndGoods.Application.Contracts.Services;
@@ -9,7 +10,6 @@ using WheelsAndGoods.Application.Options;
 using WheelsAndGoods.Core.Models.Entities;
 using WheelsAndGoods.DataAccess.Contracts;
 using WheelsAndGoods.Application.Models.Auth;
-using WheelsAndGoods.Application.Models.ValidationMessages;
 
 namespace WheelsAndGoods.Application.Services;
 
@@ -19,20 +19,23 @@ public class AuthService : IAuthService
 	private readonly AuthOptions _authOptions;
 	private readonly IHashingProvider _hashingProvider;
 	private readonly IApplicationMapper _mapper;
+    private readonly IJwtTokenVerifier _jwtTokenVerifier;
 
 	public AuthService(
 		IUnitOfWork unitOfWork, 
 		IHashingProvider hashingProvider, 
 		IApplicationMapper mapper, 
-		IOptions<AuthOptions> options)
+		IOptions<AuthOptions> options,
+        IJwtTokenVerifier jwtTokenVerifier)
 	{
 		_unitOfWork = unitOfWork;
 		_hashingProvider = hashingProvider;
 		_mapper = mapper;
-		_authOptions = options.Value;
+        _jwtTokenVerifier = jwtTokenVerifier;
+        _authOptions = options.Value;
 	}
 
-	public async Task<AuthResponse> CreateUser(RegisterRequest request)
+	public async Task<UserCreatedResponse> CreateUser(RegisterRequest request)
 	{
 		bool emailInUse = await _unitOfWork.Users.IsEmailExists(request.Email);
 
@@ -50,13 +53,14 @@ public class AuthService : IAuthService
 
 		User user = _mapper.ToUser(request, _hashingProvider);
 
-		await _unitOfWork.CommitTransactionAsync(() =>
+		var authResponse = await _unitOfWork.CommitTransactionAsync(() =>
 		{
 			_unitOfWork.Users.Add(user);
-		});
+            return GenerateAuthResponse(user);
+        });
 
-        return await GenerateAuthResponse(user);
-	}
+        return _mapper.ToUserCreatedResponse(authResponse, user);
+    }
 
     public async Task<AuthResponse> CreateUserSession(SignInRequest request)
 	{
@@ -64,47 +68,57 @@ public class AuthService : IAuthService
 
 		if (user is null || !_hashingProvider.Verify(request.Password, user.PasswordHash))
 		{
-			throw new AppValidationException(CredentialsMessages.CredentialsIsInvalidError);
+			throw new AppValidationException("Credentials is invalid");
 		}
 
-        return await GenerateAuthResponse(user);
+        var authResponse = await _unitOfWork.CommitTransactionAsync(() => GenerateAuthResponse(user));
+        return authResponse;
     }
-    
-    private async Task<Guid> GenerateRefreshToken(Guid jwtid, Guid userId)
-    {
-        var token = new RefreshToken()
-        {
-            CreatedAtUtc = DateTime.UtcNow,
-            IsInvalidated = false,
-            AccessTokenId = jwtid,
-            UserId = userId
-        };
 
-        await _unitOfWork.CommitTransactionAsync(() =>
+    public async Task<AuthResponse> RefreshToken(RefreshTokenRequest request)
+    {
+        var jwtVerificationResult = _jwtTokenVerifier.Verify(request.AccessToken);
+
+        if (!jwtVerificationResult.IsValid)
         {
-            _unitOfWork.RefreshTokens.Add(token);
+            throw new AppValidationException("Access token is invalid");
+        }
+        
+        var accessTokenId = Guid.Parse(jwtVerificationResult.TokenId);
+        var userId = Guid.Parse(jwtVerificationResult.UserId);
+
+        var refreshToken = await _unitOfWork.RefreshTokens.GetById(request.RefreshToken, false);
+
+        if (refreshToken is null || refreshToken.AccessTokenId != accessTokenId)
+        {
+            throw new AppValidationException("Refresh token is not found");
+        }
+
+        if (refreshToken.IsInvalidated)
+        {
+            throw new AppValidationException("Refresh token is invalidated");
+        }
+
+        if (IsRefreshTokenExpired(refreshToken, _authOptions.RefreshTokenTTLMinutes))
+        {
+            throw new AppValidationException("Refresh token is expired");
+        }
+
+        var user = await _unitOfWork.Users.GetById(userId, false);
+
+        var authResponse = await _unitOfWork.CommitTransactionAsync(() =>
+        {
+            _unitOfWork.RefreshTokens.Remove(refreshToken);
+            return GenerateAuthResponse(user);
         });
 
-        return token.Id;
+        return authResponse;
     }
 
-	private GeneratedTokenInfo GenerateAccessToken(User user)
-	{
-		TimeSpan lifeTime = TimeSpan.FromMinutes(_authOptions.AccessTokenTTLMinutes);
-
-		return new JwtTokenBuilder(lifeTime, _authOptions.Secret)
-			.WithAudience(_authOptions.Audience)
-			.WithIssuer(_authOptions.Issuer)
-			.WithUserEmailPayloadData(user.Email)
-			.WithUserIdPayloadData(user.Id.ToString())
-			.WithUserRolePayloadData(user.Role.ToString())
-			.Build();
-	}
-
-    private async Task<AuthResponse> GenerateAuthResponse(User user)
+    private AuthResponse GenerateAuthResponse(User user)
     {
         var tokenResult = GenerateAccessToken(user);
-        var newRefreshToken = await GenerateRefreshToken(Guid.Parse(tokenResult.TokenId), user.Id);
+        var newRefreshToken = GenerateRefreshToken(Guid.Parse(tokenResult.TokenId), user.Id);
 
         return new AuthResponse()
         {
@@ -117,15 +131,39 @@ public class AuthService : IAuthService
             {
                 Token = newRefreshToken.ToString(),
                 ExpiresAtUtc = DateTime.UtcNow.AddMinutes(_authOptions.RefreshTokenTTLMinutes)
-            },
-            User = new UserInfoResponse()
-            {
-                Id = user.Id,
-                Email = user.Email,
-                Phone = user.Phone,
-                FirstName = user.Firstname,
-                LastName = user.Lastname
             }
         };
+    }
+    
+	private GeneratedTokenInfo GenerateAccessToken(User user)
+	{
+		TimeSpan lifeTime = TimeSpan.FromMinutes(_authOptions.AccessTokenTTLMinutes);
+
+		return new JwtTokenBuilder(lifeTime, _authOptions.Secret)
+			.WithAudience(_authOptions.Audience)
+			.WithIssuer(_authOptions.Issuer)
+			.WithUserEmailPayloadData(user.Email)
+			.WithUserIdPayloadData(user.Id.ToString())
+			.WithUserRolePayloadData(user.Role.ToString())
+			.Build();
+	}
+    
+    private Guid GenerateRefreshToken(Guid jwtId, Guid userId)
+    {
+        var token = new RefreshToken()
+        {
+            CreatedAtUtc = DateTime.UtcNow,
+            IsInvalidated = false,
+            AccessTokenId = jwtId,
+            UserId = userId,
+        };
+
+        _unitOfWork.RefreshTokens.Add(token);
+        return token.Id;
+    }
+
+    private static bool IsRefreshTokenExpired(RefreshToken refreshToken, int lifeTimeMinutes)
+    {
+        return DateTime.UtcNow >= refreshToken.CreatedAtUtc.AddMinutes(lifeTimeMinutes);
     }
 }

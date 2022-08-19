@@ -58,4 +58,24 @@ public class UnitOfWork : IUnitOfWork
 			throw;
 		}
 	}
+    
+    public async Task<TResult> CommitTransactionAsync<TResult>(Func<TResult> action)
+    {
+        await using var transaction = await _databaseContext.Database.BeginTransactionAsync();
+
+        try
+        {
+            var result = action();
+            await _databaseContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return result;
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(exception, "Exception occured in transaction: {Message}.", exception.Message);
+            await transaction.RollbackAsync();
+            throw;
+        }
+    }
 }

@@ -19,7 +19,6 @@ public class UsersService : IUsersService
         _mapper = mapper;
     }
 
-
     public async Task<UserInfoResponse> GetUserInfo()
     {
         var userId = Guid.Parse(_tokenReader.UserId);

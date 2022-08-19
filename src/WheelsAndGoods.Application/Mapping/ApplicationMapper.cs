@@ -36,16 +36,7 @@ public class ApplicationMapper : IApplicationMapper
 		};
 	}
 
-	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user)
-	{
-		return new AuthResponse()
-		{
-			Jwt = jwtResponse,
-			User = ToUserInfoResponse(user),
-		};
-	}
-
-	public Order ToOrder(CreateOrderRequest createOrderRequest, User customer)
+    public Order ToOrder(CreateOrderRequest createOrderRequest, User customer)
     {
 		return new Order()
 		{
@@ -82,6 +73,16 @@ public class ApplicationMapper : IApplicationMapper
             }
 		};
 	}
+    
+    public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user)
+    {
+        return new UserCreatedResponse()
+        {
+            Jwt = authResponse.Jwt,
+            RefreshToken = authResponse.RefreshToken,
+            User = ToUserInfoResponse(user),
+        };
+    }
 
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources, Func<TSource, TDestination> rule)
 	{

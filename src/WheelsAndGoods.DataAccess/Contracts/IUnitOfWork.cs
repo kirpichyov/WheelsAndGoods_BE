@@ -8,4 +8,5 @@ public interface IUnitOfWork
 	
 	Task CommitTransactionAsync(Action action);
 	Task CommitTransactionAsync(Func<Task> action);
+    Task<TResult> CommitTransactionAsync<TResult>(Func<TResult> action);
 }
