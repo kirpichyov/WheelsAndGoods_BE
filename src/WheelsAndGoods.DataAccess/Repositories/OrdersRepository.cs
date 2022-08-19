@@ -2,6 +2,7 @@
 using WheelsAndGoods.Core.Models.Entities;
 using WheelsAndGoods.DataAccess.Connection;
 using WheelsAndGoods.DataAccess.Contracts;
+using WheelsAndGoods.DataAccess.Extensions;
 
 namespace WheelsAndGoods.DataAccess.Repositories
 {
@@ -19,6 +20,13 @@ namespace WheelsAndGoods.DataAccess.Repositories
                 .OrderByDescending(order => order.CreatedAtUtc)
                 .AsNoTracking()
                 .ToArrayAsync();
+        }
+        public async Task<Order?> GetById(Guid orderId, bool useTracking)
+        {
+            return await Context.Orders
+                .Include(order => order.Customer)
+                .WithTracking(useTracking)
+                .FirstOrDefaultAsync(order => order.Id == orderId);
         }
     }
 }

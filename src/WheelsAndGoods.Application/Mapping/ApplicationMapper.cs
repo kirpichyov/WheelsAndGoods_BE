@@ -85,6 +85,17 @@ public class ApplicationMapper : IApplicationMapper
         };
     }
 
+	public void ToUpdatedOrder(UpdateOrderRequest updateOrderRequest, Order order)
+	{
+		order.Title = updateOrderRequest.Title;
+		order.Cargo = updateOrderRequest.Cargo;
+		order.DeliveryDeadlineAtUtc = updateOrderRequest.DeliveryDeadlineAtUtc;
+		order.Description = updateOrderRequest.Description;
+		order.From = updateOrderRequest.From;
+		order.To = updateOrderRequest.To;
+		order.Price = updateOrderRequest.Price;
+	}
+
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources, Func<TSource, TDestination> rule)
 	{
 		return sources?.Select(rule).ToArray();

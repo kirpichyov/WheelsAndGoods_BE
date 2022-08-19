@@ -12,8 +12,9 @@ public interface IApplicationMapper
     public Order ToOrder(CreateOrderRequest createOrderRequest, User customer);
 	public OrderResponse ToOrderResponse(Order order);
     public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user);
+	public void ToUpdatedOrder(UpdateOrderRequest updateOrderRequest, Order order);
 
-    public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
+	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
 		IEnumerable<TSource> sources,
 		Func<TSource, TDestination> rule);
 
