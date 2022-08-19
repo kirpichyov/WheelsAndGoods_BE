@@ -32,7 +32,8 @@ public class ApplicationMapper : IApplicationMapper
 			Email = user.Email,
 			FirstName = user.Firstname,
 			LastName = user.Lastname,
-			Phone = user.Phone
+			Phone = user.Phone,
+			AvatarUrl = user.AvatarUrl
 		};
 	}
 
