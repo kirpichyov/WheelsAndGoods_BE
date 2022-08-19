@@ -22,6 +22,8 @@ public class User : EntityBase<Guid>
 	public string Firstname { get; private set; }
 	public string Lastname { get; private set; }
 	public string Phone { get; private set; }
+	public string AvatarUrl { get; set; }
+	public Guid? AvatarBlobName { get; set; }
 
 	public static User CreateUser(
 		string email,

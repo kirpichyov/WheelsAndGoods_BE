@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.User;
+using WheelsAndGoods.Application.Models.User.Responses;
 
 namespace WheelsAndGoods.Api.Controllers
 {
@@ -20,6 +21,14 @@ namespace WheelsAndGoods.Api.Controllers
         {
             await _profileService.ChangePassword(request);
             return NoContent();
+        }
+
+        [HttpPut("avatar")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<UpdateAvatarResponse> UpdateAvatar()
+        {
+            return await _profileService.UpdateAvatar();
         }
     }
 }

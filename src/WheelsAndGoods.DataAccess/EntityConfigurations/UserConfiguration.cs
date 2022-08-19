@@ -18,6 +18,8 @@ public class UserConfiguration : EntityConfigurationBase<User, Guid>
 		builder.Property(entity => entity.Firstname);
 		builder.Property(entity => entity.Lastname);
 		builder.Property(entity => entity.Phone);
+		builder.Property(entity => entity.AvatarBlobName);
+		builder.Property(entity => entity.AvatarUrl);
 		
 		builder.Property(entity => entity.Role)
 			.HasConversion(@enum => ConvertToString(@enum), @string => ConvertToEnum(@string))
