@@ -52,7 +52,8 @@ public class ApplicationMapper : IApplicationMapper
 			Title = createOrderRequest.Title,
 			Cargo = createOrderRequest.Cargo,
 			DeliveryDeadlineAtUtc = createOrderRequest.DeliveryDeadlineAtUtc,
-			Description = createOrderRequest.Description,
+            CreatedAtUtc = DateTime.UtcNow,
+            Description = createOrderRequest.Description,
 			From = createOrderRequest.From,
 			To = createOrderRequest.To,
 			Price = createOrderRequest.Price,
@@ -60,23 +61,24 @@ public class ApplicationMapper : IApplicationMapper
 		};
     }
 
-	public CreateOrderResponse ToCreateOrderResponse(Order order, User user)
+	public OrderResponse ToOrderResponse(Order order)
 	{
-		return new CreateOrderResponse()
+		return new OrderResponse()
 		{
 			Id = order.Id,
 			Title = order.Title,
 			Cargo = order.Cargo,
-			DeliveryDeadlinAtUtc = order.DeliveryDeadlineAtUtc,
+			DeliveryDeadlineAtUtc = order.DeliveryDeadlineAtUtc,
+            CreatedAtUtc = order.CreatedAtUtc,
 			Description = order.Description,
 			From = order.From,
 			To = order.To,
 			Price = order.Price,
 			Customer = new Customer
             {
-				FirstName = user.Firstname,
-				LastName = user.Lastname,
-				Phone = user.Phone
+				FirstName = order.Customer.Firstname,
+				LastName = order.Customer.Lastname,
+				Phone = order.Customer.Phone
             }
 		};
 	}

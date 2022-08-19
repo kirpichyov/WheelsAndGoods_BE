@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Kirpichyov.FriendlyJwt.Contracts;
+﻿using Kirpichyov.FriendlyJwt.Contracts;
 using WheelsAndGoods.Application.Contracts;
 using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.Orders;
@@ -25,7 +20,7 @@ namespace WheelsAndGoods.Application.Services
             _applicationMapper = applicationMapper;
         }
 
-        public async Task<CreateOrderResponse> CreateOrder(CreateOrderRequest createOrderRequest)
+        public async Task<OrderResponse> CreateOrder(CreateOrderRequest createOrderRequest)
         {
             var user = await _unitOfWork.Users.GetById(Guid.Parse(_tokenReader.UserId), true);
 
@@ -35,14 +30,21 @@ namespace WheelsAndGoods.Application.Services
             }
 
             var order = _applicationMapper.ToOrder(createOrderRequest, user);
+
             await _unitOfWork.CommitTransactionAsync(() =>
             {
                 _unitOfWork.Orders.Add(order);
             });
 
-            var responce = _applicationMapper.ToCreateOrderResponse(order, user);
+            var response = _applicationMapper.ToOrderResponse(order);
 
-            return responce;
+            return response;
+        }
+
+        public async Task<IReadOnlyCollection<OrderResponse>> GetOrders()
+        {
+            var orders = await _unitOfWork.Orders.GetOrders();
+            return _applicationMapper.MapCollectionOrEmpty(orders, _applicationMapper.ToOrderResponse);
         }
     }
 }
