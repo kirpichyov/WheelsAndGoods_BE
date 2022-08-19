@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using WheelsAndGoods.Api.Configuration.Swagger.Models;
 using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.Orders;
@@ -16,12 +15,21 @@ namespace WheelsAndGoods.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CreateOrderResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
         {
             var result = await _ordersService.CreateOrder(request);
             return StatusCode(StatusCodes.Status201Created, result);
+        }
+        
+        [HttpGet]
+        [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetOrders()
+        {
+            var result = await _ordersService.GetOrders();
+            return StatusCode(StatusCodes.Status200OK, result);
         }
     }
 }

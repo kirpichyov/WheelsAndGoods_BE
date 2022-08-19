@@ -9,6 +9,5 @@ public class RefreshTokenRepository : RepositoryBase<RefreshToken>, IRefreshToke
     public RefreshTokenRepository(DatabaseContext context) 
         : base(context)
     {
-       
     }
 }

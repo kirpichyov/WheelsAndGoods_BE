@@ -9,6 +9,7 @@ namespace WheelsAndGoods.Application.Contracts.Services
 {
     public interface IOrdersService
     {
-        Task<CreateOrderResponse> CreateOrder(CreateOrderRequest createOrderRequest);
+        Task<OrderResponse> CreateOrder(CreateOrderRequest createOrderRequest);
+        Task<IReadOnlyCollection<OrderResponse>> GetOrders();
     }
 }

@@ -8,33 +8,30 @@ namespace WheelsAndGoods.DataAccess.Repositories;
 
 public class UsersRepository : RepositoryBase<User>, IUsersRepository
 {
-	private readonly DatabaseContext _databaseContext;
-
-	public UsersRepository(DatabaseContext databaseContext) 
+    public UsersRepository(DatabaseContext databaseContext) 
 		: base(databaseContext)
 	{
-		_databaseContext = databaseContext;
-	}
+    }
 	
 	public async Task<User?> GetById(Guid userId, bool useTracking)
 	{
-		return await _databaseContext.Users
+		return await Context.Users
 			.WithTracking(useTracking)
 			.FirstOrDefaultAsync(user => user.Id == userId);
 	}
 
 	public async Task<bool> IsEmailExists(string email)
 	{
-		return await _databaseContext.Users.AnyAsync(user => user.Email == email);
+		return await Context.Users.AnyAsync(user => user.Email == email);
 	}
 
 	public async Task<bool> IsPhoneExists(string phone)
 	{
-		return await _databaseContext.Users.AnyAsync(user => user.Phone == phone);
+		return await Context.Users.AnyAsync(user => user.Phone == phone);
 	}
 
 	public async Task<User?> GetByEmail(string email)
 	{
-		return await _databaseContext.Users.FirstOrDefaultAsync(user => user.Email == email);
+		return await Context.Users.FirstOrDefaultAsync(user => user.Email == email);
 	}
 }

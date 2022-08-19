@@ -12,7 +12,7 @@ public interface IApplicationMapper
 	public UserInfoResponse ToUserInfoResponse(User user);
 	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user);
 	public Order ToOrder(CreateOrderRequest createOrderRequest, User customer);
-	public CreateOrderResponse ToCreateOrderResponse(Order order, User user);
+	public OrderResponse ToOrderResponse(Order order);
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
 		IEnumerable<TSource> sources,
 		Func<TSource, TDestination> rule);

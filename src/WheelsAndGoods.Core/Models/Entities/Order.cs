@@ -19,6 +19,7 @@ namespace WheelsAndGoods.Core.Models.Entities
         public string From { get; set; }
         public string To { get; set; }
         public DateTime DeliveryDeadlineAtUtc { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
         public decimal Price { get; set; }
         public Guid CustomerId { get; set; }
         public User Customer { get; set; }
