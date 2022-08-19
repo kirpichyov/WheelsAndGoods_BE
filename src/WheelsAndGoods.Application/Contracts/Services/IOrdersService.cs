@@ -11,5 +11,6 @@ namespace WheelsAndGoods.Application.Contracts.Services
     {
         Task<OrderResponse> CreateOrder(CreateOrderRequest createOrderRequest);
         Task<IReadOnlyCollection<OrderResponse>> GetOrders();
+        Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId);
     }
 }

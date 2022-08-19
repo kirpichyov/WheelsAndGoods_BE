@@ -46,5 +46,27 @@ namespace WheelsAndGoods.Application.Services
             var orders = await _unitOfWork.Orders.GetOrders();
             return _applicationMapper.MapCollectionOrEmpty(orders, _applicationMapper.ToOrderResponse);
         }
+
+        public async Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId)
+        {
+            var order = await _unitOfWork.Orders.GetById(orderId, false);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+            if (order.Customer.Id != Guid.Parse(_tokenReader.UserId))
+            {
+                throw new AccessDeniedException("User has no access to this order");
+            }
+
+            var updatedOrder = _applicationMapper.ToUpdatedOrder(updateOrderRequest, orderId, order.Customer);
+            await _unitOfWork.CommitTransactionAsync(() =>
+            {
+                _unitOfWork.Orders.Update(updatedOrder);
+            });
+
+            return _applicationMapper.ToOrderResponse(updatedOrder, order.Customer);
+        }
     }
 }
