@@ -8,12 +8,12 @@ namespace WheelsAndGoods.Application.Contracts;
 public interface IApplicationMapper
 {
 	public User ToUser(RegisterRequest request, IHashingProvider hashingProvider);
-
-	public UserInfoResponse ToUserInfoResponse(User user);
-	public AuthResponse ToUserResponse(JwtResponse jwtResponse, User user);
-	public Order ToOrder(CreateOrderRequest createOrderRequest, User customer);
+    public UserInfoResponse ToUserInfoResponse(User user);
+    public Order ToOrder(CreateOrderRequest createOrderRequest, User customer);
 	public OrderResponse ToOrderResponse(Order order);
-	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
+    public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user);
+
+    public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
 		IEnumerable<TSource> sources,
 		Func<TSource, TDestination> rule);
 
