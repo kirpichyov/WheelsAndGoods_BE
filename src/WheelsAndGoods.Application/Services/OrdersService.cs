@@ -68,5 +68,17 @@ namespace WheelsAndGoods.Application.Services
 
             return _applicationMapper.ToOrderResponse(order);
         }
+
+        public async Task<OrderResponse> GetOrderById(Guid orderId)
+        {
+            var order = await _unitOfWork.Orders.GetById(orderId, true);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+
+            return _applicationMapper.ToOrderResponse(order);
+        }
     }
 }

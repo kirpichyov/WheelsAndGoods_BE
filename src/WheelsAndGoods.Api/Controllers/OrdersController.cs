@@ -41,5 +41,14 @@ namespace WheelsAndGoods.Api.Controllers
             var result = await _ordersService.UpdateOrder(request, id);
             return StatusCode(StatusCodes.Status200OK, result);
         }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetOrderById([FromRoute] Guid id)
+        {
+            var result = await _ordersService.GetOrderById(id);
+            return StatusCode(StatusCodes.Status200OK, result);
+        }
     }
 }
