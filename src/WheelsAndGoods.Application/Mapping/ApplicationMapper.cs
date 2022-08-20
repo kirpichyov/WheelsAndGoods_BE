@@ -53,27 +53,28 @@ public class ApplicationMapper : IApplicationMapper
 		};
     }
 
-	public OrderResponse ToOrderResponse(Order order)
-	{
-		return new OrderResponse()
-		{
-			Id = order.Id,
-			Title = order.Title,
-			Cargo = order.Cargo,
-			DeliveryDeadlineAtUtc = order.DeliveryDeadlineAtUtc,
+    public OrderResponse ToOrderResponse(Order order)
+    {
+        return new OrderResponse()
+        {
+            Id = order.Id,
+            Title = order.Title,
+            Cargo = order.Cargo,
+            DeliveryDeadlineAtUtc = order.DeliveryDeadlineAtUtc,
             CreatedAtUtc = order.CreatedAtUtc,
-			Description = order.Description,
-			From = order.From,
-			To = order.To,
-			Price = order.Price,
-			Customer = new Customer
+            Description = order.Description,
+            From = order.From,
+            To = order.To,
+            Price = order.Price,
+            Customer = new Customer
             {
-				FirstName = order.Customer.Firstname,
-				LastName = order.Customer.Lastname,
-				Phone = order.Customer.Phone
+                Id = order.Customer.Id,
+                FirstName = order.Customer.Firstname,
+                LastName = order.Customer.Lastname,
+                Phone = order.Customer.Phone
             }
-		};
-	}
+        };
+    }
     
     public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user)
     {
