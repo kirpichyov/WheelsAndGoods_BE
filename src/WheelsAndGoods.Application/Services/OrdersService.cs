@@ -71,7 +71,7 @@ namespace WheelsAndGoods.Application.Services
 
         public async Task<OrderResponse> GetOrderById(Guid orderId)
         {
-            var order = await _unitOfWork.Orders.GetById(orderId, true);
+            var order = await _unitOfWork.Orders.GetById(orderId, false);
 
             if (order is null)
             {
