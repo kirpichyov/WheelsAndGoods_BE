@@ -1,8 +1,10 @@
 ﻿using WheelsAndGoods.Application.Contracts;
+using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
 using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
 using WheelsAndGoods.Core.Models.Entities;
+using WheelsAndGoods.Core.Models.Filter;
 
 namespace WheelsAndGoods.Application.Mapping;
 
@@ -75,7 +77,24 @@ public class ApplicationMapper : IApplicationMapper
             }
         };
     }
-    
+
+    public FilterOrderModel ToFilterOrderModel(FilterOrderRequest filterOrderRequest)
+    {
+        if (filterOrderRequest is null)
+        {
+            throw new ArgumentNullException(nameof(filterOrderRequest));
+        }
+
+        return new FilterOrderModel()
+        {
+            CustomerFullName = filterOrderRequest.CustomerFullName,
+            From = filterOrderRequest.From,
+            Price = filterOrderRequest.Price,
+            Title = filterOrderRequest.Title,
+            To = filterOrderRequest.To
+        };
+    }
+
     public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user)
     {
         return new UserCreatedResponse()

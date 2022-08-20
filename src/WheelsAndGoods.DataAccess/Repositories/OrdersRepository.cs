@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WheelsAndGoods.Core.Models.Entities;
+using WheelsAndGoods.Core.Models.Filter;
 using WheelsAndGoods.DataAccess.Connection;
 using WheelsAndGoods.DataAccess.Contracts;
 using WheelsAndGoods.DataAccess.Extensions;
@@ -13,14 +14,47 @@ namespace WheelsAndGoods.DataAccess.Repositories
         {
         }
 
-        public async Task<IReadOnlyCollection<Order>> GetOrders()
+        public async Task<IReadOnlyCollection<Order>> GetOrders(FilterOrderModel filterOrderModel)
         {
-            return await Context.Orders
+            var query = Context.Orders
                 .Include(order => order.Customer)
-                .OrderByDescending(order => order.CreatedAtUtc)
+                .AsQueryable();
+
+            if (filterOrderModel.From != null)
+            {
+                query = query.Where(order => EF.Functions.ILike(
+                    order.From, $"%{filterOrderModel.From}%"));
+            }
+
+            if (filterOrderModel.Title != null)
+            {
+                query = query.Where(order => EF.Functions.ILike(
+                    order.Title, $"%{filterOrderModel.Title}%"));
+            }
+
+            if (filterOrderModel.To != null)
+            {
+                query = query.Where(order => EF.Functions.ILike(
+                    order.To, $"%{filterOrderModel.To}%"));
+            }
+
+            if (filterOrderModel.CustomerFullName != null)
+            {
+                query = query.Where(order => EF.Functions.ILike(
+                    $"{order.Customer.Firstname} {order.Customer.Lastname}",
+                    $"%{filterOrderModel.CustomerFullName}%"));
+            }
+            
+            if (filterOrderModel.Price != null)
+            {
+                query = query.Where(order => order.Price >= filterOrderModel.Price);
+            }
+
+            return await query.OrderByDescending(order => order.CreatedAtUtc)
                 .AsNoTracking()
                 .ToArrayAsync();
         }
+
         public async Task<Order?> GetById(Guid orderId, bool useTracking)
         {
             return await Context.Orders
