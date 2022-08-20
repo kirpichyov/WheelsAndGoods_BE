@@ -64,6 +64,7 @@ public class ApplicationMapper : IApplicationMapper
             Cargo = order.Cargo,
             DeliveryDeadlineAtUtc = order.DeliveryDeadlineAtUtc,
             CreatedAtUtc = order.CreatedAtUtc,
+			UpdatedAtUtc = order.UpdatedAtUtc,
             Description = order.Description,
             From = order.From,
             To = order.To,
@@ -114,6 +115,7 @@ public class ApplicationMapper : IApplicationMapper
 		order.From = updateOrderRequest.From;
 		order.To = updateOrderRequest.To;
 		order.Price = updateOrderRequest.Price;
+		order.UpdatedAtUtc = DateTime.UtcNow;
 	}
 
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources, Func<TSource, TDestination> rule)
