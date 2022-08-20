@@ -131,7 +131,8 @@ public class AuthService : IAuthService
             {
                 Token = newRefreshToken.ToString(),
                 ExpiresAtUtc = DateTime.UtcNow.AddMinutes(_authOptions.RefreshTokenTTLMinutes)
-            }
+            },
+            UserId = user.Id,
         };
     }
     
