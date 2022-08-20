@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WheelsAndGoods.Api.Configuration.Swagger.Models;
 using WheelsAndGoods.Application.Contracts.Services;
+using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
 
 namespace WheelsAndGoods.Api.Controllers
@@ -26,9 +27,9 @@ namespace WheelsAndGoods.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetOrders()
+        public async Task<IActionResult> GetOrders([FromQuery] FilterOrderRequest filterOrderRequest)
         {
-            var result = await _ordersService.GetOrders();
+            var result = await _ordersService.GetOrders(filterOrderRequest);
             return StatusCode(StatusCodes.Status200OK, result);
         }
 

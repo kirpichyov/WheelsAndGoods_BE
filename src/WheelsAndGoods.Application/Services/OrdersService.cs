@@ -1,6 +1,7 @@
 ﻿using Kirpichyov.FriendlyJwt.Contracts;
 using WheelsAndGoods.Application.Contracts;
 using WheelsAndGoods.Application.Contracts.Services;
+using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
 using WheelsAndGoods.Core.Exceptions;
 using WheelsAndGoods.DataAccess.Contracts;
@@ -41,9 +42,9 @@ namespace WheelsAndGoods.Application.Services
             return response;
         }
 
-        public async Task<IReadOnlyCollection<OrderResponse>> GetOrders()
+        public async Task<IReadOnlyCollection<OrderResponse>> GetOrders(FilterOrderRequest filterOrderRequest)
         {
-            var orders = await _unitOfWork.Orders.GetOrders();
+            var orders = await _unitOfWork.Orders.GetOrders(_applicationMapper.ToFilterOrderModel(filterOrderRequest));
             return _applicationMapper.MapCollectionOrEmpty(orders, _applicationMapper.ToOrderResponse);
         }
 
