@@ -18,6 +18,7 @@ namespace WheelsAndGoods.DataAccess.Repositories
         {
             var query = Context.Orders
                 .Include(order => order.Customer)
+                .Where(order => !order.IsDeleted)
                 .AsQueryable();
 
             if (filterOrderModel.From != null)
@@ -60,6 +61,7 @@ namespace WheelsAndGoods.DataAccess.Repositories
             return await Context.Orders
                 .Include(order => order.Customer)
                 .WithTracking(useTracking)
+                .Where(order => !order.IsDeleted)
                 .FirstOrDefaultAsync(order => order.Id == orderId);
         }
     }

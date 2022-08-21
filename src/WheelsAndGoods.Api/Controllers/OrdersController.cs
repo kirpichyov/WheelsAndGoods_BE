@@ -23,7 +23,7 @@ namespace WheelsAndGoods.Api.Controllers
             var result = await _ordersService.CreateOrder(request);
             return StatusCode(StatusCodes.Status201Created, result);
         }
-        
+
         [HttpGet]
         [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
@@ -49,6 +49,15 @@ namespace WheelsAndGoods.Api.Controllers
         {
             var result = await _ordersService.GetOrderById(id);
             return StatusCode(StatusCodes.Status200OK, result);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteOrder([FromRoute] Guid id)
+        {
+            await _ordersService.DeleteOrder(id);
+            return StatusCode(StatusCodes.Status204NoContent);
         }
     }
 }

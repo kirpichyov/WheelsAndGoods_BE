@@ -22,6 +22,7 @@ namespace WheelsAndGoods.DataAccess.EntityConfigurations
 			builder.Property(entity => entity.DeliveryDeadlineAtUtc).IsRequired();
 			builder.Property(entity => entity.CreatedAtUtc).IsRequired();
 			builder.Property(entity => entity.Price).IsRequired();
+			builder.Property(entity => entity.IsDeleted);
 
 			builder.HasOne(entity => entity.Customer)
 				.WithMany()
