@@ -14,5 +14,6 @@ namespace WheelsAndGoods.Application.Contracts.Services
         Task<IReadOnlyCollection<OrderResponse>> GetOrders(FilterOrderRequest filterOrderRequest);
         Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId);
         Task<OrderResponse> GetOrderById(Guid orderId);
+        Task DeleteOrder(Guid orderId);
     }
 }

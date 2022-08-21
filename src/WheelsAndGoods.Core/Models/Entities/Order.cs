@@ -11,6 +11,7 @@ namespace WheelsAndGoods.Core.Models.Entities
         public Order()
             :base(Guid.NewGuid())
         {
+            IsDeleted = false;
         }
 
         public string Title { get; set; }
@@ -24,6 +25,6 @@ namespace WheelsAndGoods.Core.Models.Entities
         public decimal Price { get; set; }
         public Guid CustomerId { get; set; }
         public User Customer { get; set; }
-
+        public bool IsDeleted { get; set; }
     }
 }
