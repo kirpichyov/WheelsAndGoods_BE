@@ -85,7 +85,6 @@ namespace WheelsAndGoods.Application.Services
         {
             var order = await _unitOfWork.Orders.GetById(orderId, true);
 
-
             if (order is null)
             {
                 throw new NotFoundException("Order not found");
