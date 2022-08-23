@@ -48,26 +48,26 @@ namespace WheelsAndGoods.Application.Services
             return _applicationMapper.MapCollectionOrEmpty(orders, _applicationMapper.ToOrderResponse);
         }
 
-        //public async Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId)
-        //{
-        //    var order = await _unitOfWork.Orders.GetById(orderId, true);
+        public async Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId)
+        {
+            var order = await _unitOfWork.Orders.GetById(orderId, true);
 
-        //    if (order is null)
-        //    {
-        //        throw new NotFoundException("Order not found");
-        //    }
-        //    if (order.Customer.Id != Guid.Parse(_tokenReader.UserId))
-        //    {
-        //        throw new AccessDeniedException("User has no access to this order");
-        //    }
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+            if (order.Customer.Id != Guid.Parse(_tokenReader.UserId))
+            {
+                throw new AccessDeniedException("User has no access to this order");
+            }
             
-        //    await _unitOfWork.CommitTransactionAsync(() =>
-        //    {
-        //        _applicationMapper.ToUpdatedOrder(updateOrderRequest, order);
-        //    });
+            await _unitOfWork.CommitTransactionAsync(() =>
+            {
+                _applicationMapper.ToUpdatedOrder(updateOrderRequest, order);
+            });
 
-        //    return _applicationMapper.ToOrderResponse(order);
-        //}
+            return _applicationMapper.ToOrderResponse(order);
+        }
 
         public async Task<OrderResponse> GetOrderById(Guid orderId)
         {
@@ -80,7 +80,7 @@ namespace WheelsAndGoods.Application.Services
 
             return _applicationMapper.ToOrderResponse(order);
         }
- 
+
         public async Task DeleteOrder(Guid orderId)
         {
             var order = await _unitOfWork.Orders.GetById(orderId, true);
