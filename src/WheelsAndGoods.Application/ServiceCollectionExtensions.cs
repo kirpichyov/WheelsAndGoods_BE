@@ -16,10 +16,13 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<BlobOptions>(configuration.GetSection(nameof(BlobOptions)));
         services.Configure<SendGridOptions>(configuration.GetSection(nameof(SendGridOptions)));
+        services.Configure<ResetPasswordCodeOptions>(configuration.GetSection(nameof(ResetPasswordCodeOptions)));
         
 		services.AddScoped<IApplicationMapper, ApplicationMapper>();
 		services.AddScoped<IHashingProvider, HashingProvider>();
 		services.AddScoped<IAuthService, AuthService>();
+		services.AddScoped<IResetPasswordCodesService, ResetPasswordCodesService>();
+		services.AddScoped<IKeysGeneratorService, KeysGeneratorService>();
         services.AddScoped<IUsersService, UsersService>();
 		services.AddScoped<IProfileService, ProfileService>();
 		services.AddScoped<IOrdersService, OrdersService>();

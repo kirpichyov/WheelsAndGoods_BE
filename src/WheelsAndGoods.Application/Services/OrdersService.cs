@@ -27,7 +27,7 @@ namespace WheelsAndGoods.Application.Services
 
             if (user is null)
             {
-                throw new NotFoundException("Customer not found");
+                throw new NotFoundException("User not found");
             }
 
             var order = _applicationMapper.ToOrder(createOrderRequest, user);

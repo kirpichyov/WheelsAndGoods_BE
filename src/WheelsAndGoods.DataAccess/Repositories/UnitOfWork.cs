@@ -12,16 +12,19 @@ public class UnitOfWork : IUnitOfWork
 	private IUsersRepository? _usersRepository;
     private IRefreshTokenRepository? _refreshTokenRepository;
 	private IOrdersRepository? _ordersRepository;
+	private IResetPasswordCodesRepository? _resetPasswordCodesRepository;
 
 	public UnitOfWork(DatabaseContext databaseContext, ILogger<UnitOfWork> logger)
 	{
 		_databaseContext = databaseContext;
 		_logger = logger;
-	}
+    }
 
 	public IUsersRepository Users => _usersRepository ??= new UsersRepository(_databaseContext);
 	public IRefreshTokenRepository RefreshTokens => _refreshTokenRepository ??= new RefreshTokenRepository(_databaseContext);
 	public IOrdersRepository Orders => _ordersRepository ??= new OrdersRepository(_databaseContext);
+    public IResetPasswordCodesRepository ResetPasswordCodes => _resetPasswordCodesRepository 
+        ??= new ResetPasswordCodesRepository(_databaseContext);
 	
 	public async Task CommitTransactionAsync(Action action)
 	{
