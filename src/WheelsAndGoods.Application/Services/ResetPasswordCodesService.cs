@@ -33,7 +33,7 @@ public class ResetPasswordCodesService : IResetPasswordCodesService
     {
         string emailMessage = 
             $"You have requested a password reset. Follow the link to reset your password: {_options.Url}";
-        var user = _unitOfWork.Users.GetByEmail(request.Email);
+        var user = await _unitOfWork.Users.GetByEmail(request.Email);
 
         if (user is null)
         {
