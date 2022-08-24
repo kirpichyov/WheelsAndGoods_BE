@@ -11,11 +11,15 @@ namespace WheelsAndGoods.Api.Controllers;
 public class AuthController : ApiControllerBase
 {
 	private readonly IAuthService _authService;
+    private readonly IResetPasswordCodesService _resetPasswordCodesService;
 
-	public AuthController(IAuthService authService)
-	{
-		_authService = authService;
-	}
+	public AuthController(
+        IAuthService authService, 
+        IResetPasswordCodesService resetPasswordCodesService)
+    {
+        _authService = authService;
+        _resetPasswordCodesService = resetPasswordCodesService;
+    }
 
 	[HttpPost("register")]
 	[AllowAnonymous]
@@ -45,5 +49,15 @@ public class AuthController : ApiControllerBase
     {
         var result = await _authService.RefreshToken(request);
         return Ok(result);
+    }
+    
+    [HttpPost("reset-password/request-email")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        await _resetPasswordCodesService.SendResetPasswordCodeEmail(request);
+        return NoContent();
     }
 }
