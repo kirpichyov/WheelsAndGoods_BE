@@ -117,7 +117,7 @@ namespace WheelsAndGoods.Application.Services
             }
             if(await _unitOfWork.OrdersRequests.IsUserAlreadyHasRequest(orderId, userId))
             {
-                throw new AppValidationException("User already take this order");
+                throw new AppValidationException("User already requested this order");
             }
             if(order.Status != Status.WaitingForContractor)
             {
