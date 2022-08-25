@@ -1,10 +1,12 @@
 ﻿using WheelsAndGoods.Application.Contracts;
 using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
+using WheelsAndGoods.Application.Models.Paginations;
 using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
 using WheelsAndGoods.Core.Models.Entities;
-using WheelsAndGoods.Core.Models.Filter;
+using WheelsAndGoods.Core.Models.Filters;
+using WheelsAndGoods.Core.Models.Paginations;
 
 namespace WheelsAndGoods.Application.Mapping;
 
@@ -93,6 +95,20 @@ public class ApplicationMapper : IApplicationMapper
             Price = filterOrderRequest.Price,
             Title = filterOrderRequest.Title,
             To = filterOrderRequest.To
+        };
+    }
+    
+    public PaginationOrderModel ToPaginationOrderModel(PaginationRequest paginationRequest)
+    {
+        if (paginationRequest is null)
+        {
+            throw new ArgumentNullException(nameof(paginationRequest));
+        }
+
+        return new PaginationOrderModel()
+        {
+            PageNumber = paginationRequest.PageNumber,
+            PageSize = paginationRequest.PageSize
         };
     }
 

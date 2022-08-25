@@ -1,9 +1,11 @@
 ﻿using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
+using WheelsAndGoods.Application.Models.Paginations;
 using WheelsAndGoods.Application.Models.User;
 using WheelsAndGoods.Application.Models.User.Responses;
 using WheelsAndGoods.Core.Models.Entities;
-using WheelsAndGoods.Core.Models.Filter;
+using WheelsAndGoods.Core.Models.Filters;
+using WheelsAndGoods.Core.Models.Paginations;
 
 namespace WheelsAndGoods.Application.Contracts;
 
@@ -14,6 +16,7 @@ public interface IApplicationMapper
     public Order ToOrder(CreateOrderRequest createOrderRequest, User customer);
 	public OrderResponse ToOrderResponse(Order order);
     public FilterOrderModel ToFilterOrderModel(FilterOrderRequest filterOrderRequest);
+    public PaginationOrderModel ToPaginationOrderModel(PaginationRequest paginationRequest);
     public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user);
 	public void ToUpdatedOrder(UpdateOrderRequest updateOrderRequest, Order order);
 	public TakeOrderResponse ToTakeOrderResponse(OrderRequest orderRequest, User author);

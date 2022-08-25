@@ -3,6 +3,7 @@ using WheelsAndGoods.Api.Configuration.Swagger.Models;
 using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
+using WheelsAndGoods.Application.Models.Paginations;
 
 namespace WheelsAndGoods.Api.Controllers
 {
@@ -27,9 +28,10 @@ namespace WheelsAndGoods.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(OrderResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetOrders([FromQuery] FilterOrderRequest filterOrderRequest)
+        public async Task<IActionResult> GetOrders([FromQuery] FilterOrderRequest filterOrderRequest,
+            [FromQuery] PaginationRequest paginationRequest)
         {
-            var result = await _ordersService.GetOrders(filterOrderRequest);
+            var result = await _ordersService.GetOrders(filterOrderRequest, paginationRequest);
             return StatusCode(StatusCodes.Status200OK, result);
         }
 
