@@ -16,7 +16,7 @@ public interface IApplicationMapper
     public FilterOrderModel ToFilterOrderModel(FilterOrderRequest filterOrderRequest);
     public UserCreatedResponse ToUserCreatedResponse(AuthResponse authResponse, User user);
 	public void ToUpdatedOrder(UpdateOrderRequest updateOrderRequest, Order order);
-	public TakeOrderResponse ToTakeOrderReponce(OrderRequest orderRequest, User author);
+	public TakeOrderResponse ToTakeOrderReponse(OrderRequest orderRequest, User author);
 
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(
 		IEnumerable<TSource> sources,

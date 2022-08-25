@@ -118,7 +118,7 @@ public class ApplicationMapper : IApplicationMapper
 		order.UpdatedAtUtc = DateTime.UtcNow;
 	}
 
-	public TakeOrderResponse ToTakeOrderReponce(OrderRequest orderRequest, User author)
+	public TakeOrderResponse ToTakeOrderReponse(OrderRequest orderRequest, User author)
     {
 		return new TakeOrderResponse()
 		{

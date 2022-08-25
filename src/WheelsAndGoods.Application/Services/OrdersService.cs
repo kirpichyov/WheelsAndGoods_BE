@@ -139,7 +139,7 @@ namespace WheelsAndGoods.Application.Services
 
             var user = await _unitOfWork.Users.GetById(userId, false);
 
-            return _applicationMapper.ToTakeOrderReponce(orderRequest, user);
+            return _applicationMapper.ToTakeOrderReponse(orderRequest, user);
         }
     }
 }
