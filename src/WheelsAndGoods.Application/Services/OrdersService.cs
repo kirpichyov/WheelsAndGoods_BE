@@ -4,6 +4,7 @@ using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
 using WheelsAndGoods.Core.Exceptions;
+using WheelsAndGoods.Core.Models.Enums;
 using WheelsAndGoods.DataAccess.Contracts;
 
 namespace WheelsAndGoods.Application.Services
@@ -98,6 +99,32 @@ namespace WheelsAndGoods.Application.Services
             {
                 order.IsDeleted = true;
             });
+        }
+
+        public async Task<TakeOrderResponse> TakeOrder(Guid orderId, TakeOrderRequest request)
+        {
+            var order = await _unitOfWork.Orders.GetById(orderId, false);
+            var userId = Guid.Parse(_tokenReader.UserId);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+            if (order.Customer.Id == userId || order.Status != Status.WaitingForContractor)
+            {
+                throw new AccessDeniedException("User has no access to take this order");
+            }
+
+            var orderRequest = _applicationMapper.ToOrderRequest(request.Comment, orderId, userId);
+
+            await _unitOfWork.CommitTransactionAsync(() =>
+            {
+                _unitOfWork.OrdersRequests.Add(orderRequest);
+            });
+
+            var user = await _unitOfWork.Users.GetById(userId, false);
+
+            return _applicationMapper.ToTakeOrderReponce(orderRequest, user);
         }
     }
 }

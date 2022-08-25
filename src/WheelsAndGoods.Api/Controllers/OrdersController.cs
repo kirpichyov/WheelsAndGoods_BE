@@ -50,5 +50,14 @@ namespace WheelsAndGoods.Api.Controllers
             await _ordersService.DeleteOrder(id);
             return StatusCode(StatusCodes.Status204NoContent);
         }
+
+        [HttpPost("{id}/request")]
+        [ProducesResponseType(typeof(TakeOrderResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> TakeOrder([FromRoute]Guid id, [FromBody] TakeOrderRequest request)
+        {
+            var result = await _ordersService.TakeOrder(id, request);
+            return StatusCode(StatusCodes.Status201Created, result);
+        }
     }
 }
