@@ -3,8 +3,10 @@ using WheelsAndGoods.Application.Contracts;
 using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
+using WheelsAndGoods.Application.Models.Paginations;
 using WheelsAndGoods.Core.Exceptions;
 using WheelsAndGoods.Core.Models.Entities;
+using WheelsAndGoods.Core.Models.Paginations.Responses;
 using WheelsAndGoods.Core.Models.Enums;
 using WheelsAndGoods.DataAccess.Contracts;
 
@@ -44,10 +46,12 @@ namespace WheelsAndGoods.Application.Services
             return response;
         }
 
-        public async Task<IReadOnlyCollection<OrderResponse>> GetOrders(FilterOrderRequest filterOrderRequest)
+        public async Task<PaginationOrderResponse<Order>> GetOrders(FilterOrderRequest filterOrderRequest,
+            PaginationRequest paginationRequest)
         {
-            var orders = await _unitOfWork.Orders.GetOrders(_applicationMapper.ToFilterOrderModel(filterOrderRequest));
-            return _applicationMapper.MapCollectionOrEmpty(orders, _applicationMapper.ToOrderResponse);
+            return await _unitOfWork.Orders.GetOrders(
+                _applicationMapper.ToFilterOrderModel(filterOrderRequest), 
+                _applicationMapper.ToPaginationOrderModel(paginationRequest));
         }
 
         public async Task<OrderResponse> UpdateOrder(UpdateOrderRequest updateOrderRequest, Guid orderId)

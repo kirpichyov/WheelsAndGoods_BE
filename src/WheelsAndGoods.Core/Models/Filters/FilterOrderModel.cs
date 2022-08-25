@@ -1,4 +1,4 @@
-﻿namespace WheelsAndGoods.Core.Models.Filter;
+﻿namespace WheelsAndGoods.Core.Models.Filters;
 
 public class FilterOrderModel
 {

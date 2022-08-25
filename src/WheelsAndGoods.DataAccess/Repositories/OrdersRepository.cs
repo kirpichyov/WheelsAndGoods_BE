@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WheelsAndGoods.Core.Models.Entities;
-using WheelsAndGoods.Core.Models.Filter;
+using WheelsAndGoods.Core.Models.Filters;
+using WheelsAndGoods.Core.Models.Paginations;
+using WheelsAndGoods.Core.Models.Paginations.Responses;
 using WheelsAndGoods.DataAccess.Connection;
 using WheelsAndGoods.DataAccess.Contracts;
 using WheelsAndGoods.DataAccess.Extensions;
@@ -14,7 +16,8 @@ namespace WheelsAndGoods.DataAccess.Repositories
         {
         }
 
-        public async Task<IReadOnlyCollection<Order>> GetOrders(FilterOrderModel filterOrderModel)
+        public async Task<PaginationOrderResponse<Order>> GetOrders(FilterOrderModel filterOrderModel,
+            PaginationOrderModel paginationOrderModel)
         {
             var query = Context.Orders
                 .Include(order => order.Customer)
@@ -50,10 +53,22 @@ namespace WheelsAndGoods.DataAccess.Repositories
             {
                 query = query.Where(order => order.Price >= filterOrderModel.Price);
             }
+            
+            int totalCount = await query.CountAsync();
 
-            return await query.OrderByDescending(order => order.CreatedAtUtc)
-                .AsNoTracking()
-                .ToArrayAsync();
+            query = query.OrderByDescending(order => order.CreatedAtUtc)
+                .Skip((paginationOrderModel.PageNumber - 1) * paginationOrderModel.PageSize)
+                .Take(paginationOrderModel.PageSize)
+                .AsNoTracking();
+
+            return new PaginationOrderResponse<Order>()
+            {
+                TotalPages = (totalCount % paginationOrderModel.PageSize == 0) 
+                    ? (totalCount / paginationOrderModel.PageSize) 
+                    : (totalCount / paginationOrderModel.PageSize) + 1,
+                TotalCount = totalCount,
+                Data = await query.ToArrayAsync()
+            };
         }
 
         public async Task<Order?> GetById(Guid orderId, bool useTracking)
