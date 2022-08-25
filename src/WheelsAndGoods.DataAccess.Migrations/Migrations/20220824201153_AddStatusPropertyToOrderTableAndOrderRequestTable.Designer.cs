@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WheelsAndGoods.DataAccess.Connection;
@@ -11,9 +12,10 @@ using WheelsAndGoods.DataAccess.Connection;
 namespace WheelsAndGoods.DataAccess.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220824201153_AddStatusPropertyToOrderTableAndOrderRequestTable")]
+    partial class AddStatusPropertyToOrderTableAndOrderRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,33 +157,6 @@ namespace WheelsAndGoods.DataAccess.Migrations.Migrations
                         .HasDatabaseName("ix_refresh_tokens_user_id");
 
                     b.ToTable("refresh_tokens", (string)null);
-                });
-
-            modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.ResetPasswordCodes", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("code");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("timestamp without time zone")
-                        .HasColumnName("created_at_utc");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.HasKey("Id")
-                        .HasName("pk_reset_password_codes");
-
-                    b.ToTable("reset_password_codes", (string)null);
                 });
 
             modelBuilder.Entity("WheelsAndGoods.Core.Models.Entities.User", b =>

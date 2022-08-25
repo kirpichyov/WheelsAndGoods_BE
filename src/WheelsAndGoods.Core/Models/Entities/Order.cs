@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WheelsAndGoods.Core.Models.Enums;
 
 namespace WheelsAndGoods.Core.Models.Entities
 {
@@ -12,6 +13,7 @@ namespace WheelsAndGoods.Core.Models.Entities
             :base(Guid.NewGuid())
         {
             IsDeleted = false;
+            Status = Status.WaitingForContractor;
         }
 
         public string Title { get; set; }
@@ -23,6 +25,7 @@ namespace WheelsAndGoods.Core.Models.Entities
         public DateTime CreatedAtUtc { get; set; }
         public DateTime? UpdatedAtUtc { get; set; }
         public decimal Price { get; set; }
+        public Status Status { get; set; }
         public Guid CustomerId { get; set; }
         public User Customer { get; set; }
         public bool IsDeleted { get; set; }

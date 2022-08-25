@@ -118,6 +118,23 @@ public class ApplicationMapper : IApplicationMapper
 		order.UpdatedAtUtc = DateTime.UtcNow;
 	}
 
+	public TakeOrderResponse ToTakeOrderResponse(OrderRequest orderRequest, User author)
+    {
+		return new TakeOrderResponse()
+		{
+			Id = orderRequest.OrderId,
+			Comment = orderRequest.Comment,
+			CreaterAtUtc = orderRequest.CreatedAtUtc,
+			Author = new TakeOrderRequestAuthor()
+			{
+				FirstName = author.Firstname,
+				LastName = author.Lastname,
+				Phone = author.Phone,
+				AvatarUrl = author.AvatarUrl
+			}
+		};
+    }
+
 	public IReadOnlyCollection<TDestination> MapCollection<TSource, TDestination>(IEnumerable<TSource> sources, Func<TSource, TDestination> rule)
 	{
 		return sources?.Select(rule).ToArray();

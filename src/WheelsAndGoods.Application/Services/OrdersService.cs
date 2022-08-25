@@ -4,6 +4,8 @@ using WheelsAndGoods.Application.Contracts.Services;
 using WheelsAndGoods.Application.Models.Filtering;
 using WheelsAndGoods.Application.Models.Orders;
 using WheelsAndGoods.Core.Exceptions;
+using WheelsAndGoods.Core.Models.Entities;
+using WheelsAndGoods.Core.Models.Enums;
 using WheelsAndGoods.DataAccess.Contracts;
 
 namespace WheelsAndGoods.Application.Services
@@ -98,6 +100,46 @@ namespace WheelsAndGoods.Application.Services
             {
                 order.IsDeleted = true;
             });
+        }
+
+        public async Task<TakeOrderResponse> CreateTakeOrderRequest(Guid orderId, TakeOrderRequest request)
+        {
+            var order = await _unitOfWork.Orders.GetById(orderId, false);
+            var userId = Guid.Parse(_tokenReader.UserId);
+
+            if (order is null)
+            {
+                throw new NotFoundException("Order not found");
+            }
+            if (order.Customer.Id == userId)
+            {
+                throw new AppValidationException("User can't take own order");
+            }
+            if(await _unitOfWork.OrdersRequests.IsUserAlreadyHasRequest(orderId, userId))
+            {
+                throw new AppValidationException("User already requested this order");
+            }
+            if(order.Status != Status.WaitingForContractor)
+            {
+                throw new AppValidationException($"User can't take order with status {order.Status}");
+            }
+
+            var orderRequest = new OrderRequest()
+            {
+                OrderId = orderId,
+                UserId = userId,
+                CreatedAtUtc = DateTime.UtcNow,
+                Comment = request.Comment
+            };
+
+            await _unitOfWork.CommitTransactionAsync(() =>
+            {
+                _unitOfWork.OrdersRequests.Add(orderRequest);
+            });
+
+            var user = await _unitOfWork.Users.GetById(userId, false);
+
+            return _applicationMapper.ToTakeOrderResponse(orderRequest, user);
         }
     }
 }

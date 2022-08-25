@@ -10,6 +10,7 @@ public class DatabaseContext : DbContext
 	public DbSet<User> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
 	public DbSet<Order> Orders { get; set; }
+	public DbSet<OrderRequest> OrdersRequests { get; set; }
 	public DbSet<ResetPasswordCode> ResetPasswordCodes { get; set; }
 
 	public DatabaseContext(DbContextOptions<DatabaseContext> options)
