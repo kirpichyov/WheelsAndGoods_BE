@@ -9,6 +9,6 @@ namespace WheelsAndGoods.DataAccess.Contracts
 {
     public interface IOrdersRequestsRepository : IRepositoryBase<OrderRequest>
     {
-
+        Task<bool> CheckIfOrderedByUser(Guid orderId, Guid userId);
     }
 }

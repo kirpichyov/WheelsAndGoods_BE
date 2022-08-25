@@ -118,17 +118,6 @@ public class ApplicationMapper : IApplicationMapper
 		order.UpdatedAtUtc = DateTime.UtcNow;
 	}
 
-	public OrderRequest ToOrderRequest(string comment,Guid orderId, Guid userId)
-    {
-		return new OrderRequest
-		{
-			OrderId = orderId,
-			UserId = userId,
-			Comment = comment,
-			CreatedAtUtc = DateTime.UtcNow
-		};
-    }
-
 	public TakeOrderResponse ToTakeOrderReponce(OrderRequest orderRequest, User author)
     {
 		return new TakeOrderResponse()
@@ -136,7 +125,7 @@ public class ApplicationMapper : IApplicationMapper
 			Id = orderRequest.OrderId,
 			Comment = orderRequest.Comment,
 			CreaterAtUtc = orderRequest.CreatedAtUtc,
-			Author = new OrderRequestAuthor()
+			Author = new TakeOrderRequestAuthor()
 			{
 				FirstName = author.Firstname,
 				LastName = author.Lastname,

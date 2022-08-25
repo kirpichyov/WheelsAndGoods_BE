@@ -16,5 +16,14 @@ namespace WheelsAndGoods.DataAccess.Repositories
         {
 
         }
+
+        public async Task<bool> CheckIfOrderedByUser(Guid orderId, Guid userId)
+        {
+            if(Context.OrdersRequests.FirstOrDefault(entity => entity.UserId == userId && entity.OrderId == orderId) == null)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 }

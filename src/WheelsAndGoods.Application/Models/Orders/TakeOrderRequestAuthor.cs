@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WheelsAndGoods.Application.Models.Orders
 {
-    public class OrderRequestAuthor
+    public class TakeOrderRequestAuthor
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

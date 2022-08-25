@@ -11,6 +11,6 @@ namespace WheelsAndGoods.Application.Models.Orders
         public Guid Id { get; set; }
         public string Comment { get; set; }
         public DateTime CreaterAtUtc { get; set; }
-        public OrderRequestAuthor Author { get; set; }
+        public TakeOrderRequestAuthor Author { get; set; }
     }
 }

@@ -56,7 +56,7 @@ namespace WheelsAndGoods.Api.Controllers
         [ProducesResponseType(typeof(BadRequestModel), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> TakeOrder([FromRoute]Guid id, [FromBody] TakeOrderRequest request)
         {
-            var result = await _ordersService.TakeOrder(id, request);
+            var result = await _ordersService.CreateTakeOrderRequest(id, request);
             return StatusCode(StatusCodes.Status201Created, result);
         }
     }
