@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using WheelsAndGoods.Core.Models.Entities;
 using WheelsAndGoods.DataAccess.Connection;
 using WheelsAndGoods.DataAccess.Contracts;
@@ -17,13 +18,9 @@ namespace WheelsAndGoods.DataAccess.Repositories
 
         }
 
-        public async Task<bool> CheckIfOrderedByUser(Guid orderId, Guid userId)
+        public async Task<bool> IsUserAlreadyHasRequest(Guid orderId, Guid userId)
         {
-            if(Context.OrdersRequests.FirstOrDefault(entity => entity.UserId == userId && entity.OrderId == orderId) == null)
-            {
-                return false;
-            }
-            return true;
+            return await Context.OrdersRequests.AnyAsync(entity => entity.UserId == userId && entity.OrderId == orderId);
         }
     }
 }

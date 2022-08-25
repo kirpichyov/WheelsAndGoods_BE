@@ -115,7 +115,7 @@ namespace WheelsAndGoods.Application.Services
             {
                 throw new AppValidationException("User can't take own order");
             }
-            if(await _unitOfWork.OrdersRequests.CheckIfOrderedByUser(orderId, userId))
+            if(await _unitOfWork.OrdersRequests.IsUserAlreadyHasRequest(orderId, userId))
             {
                 throw new AppValidationException("User already take this order");
             }
